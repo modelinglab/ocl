@@ -11,11 +11,7 @@
     <version>1.0.6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>OCL (POM)</name>
-    
-    <scm>
-        <developerConnection>scm:svn:svn+ssh://software.imdea.org/srv/svn/mda/code/maven/main-tools/ocl/trunk/</developerConnection>
-    </scm>
-    
+     
     <modules>
         <module>ext</module>
         <module>providers</module>
