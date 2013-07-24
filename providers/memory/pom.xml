@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>providers</artifactId>
+        <groupId>org.modelinglab.ocl.providers</groupId>
+        <version>1.0.6-SNAPSHOT</version>
+    </parent>
+    <artifactId>memory</artifactId>
+    <name>OCL memory provider</name>
+    <description>
+        This library is a trivial Object Provider implementation that retrieve objects from RAM memory.
+    </description>
+    
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.modelinglab.ocl</groupId>
+            <artifactId>evaluator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+</project>

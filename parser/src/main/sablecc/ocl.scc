@@ -1,0 +1,488 @@
+Package com.meaningfulmodels.ocl.parser.sablecc;
+
+Helpers
+    /* Our helpers */
+    digit = ['0' .. '9'] ;
+    char = ['a'..'z'] | ['A'..'Z'];
+    sp = ' ' ;
+    nl = 10 ;
+    simple = ''';
+    cr = 13;
+    not_cr_nl = [[[32..127] + [162..255]] - [cr + nl]];
+    
+Tokens
+    /* Our simple token definition(s). */
+    integer = digit+;
+    real = digit+ '.' digit+;
+    /*string = simple (char | digit | '-' | '_' | sp)* simple;*/
+    string = simple [not_cr_nl - simple]* simple;
+    string2 = '"' [not_cr_nl - '"']* '"';
+    comma = ',';
+    semicolon = ';';
+    dot ='.';
+    double_dot = '..';
+    arrow = '->';
+    true = 'true';
+    false = 'false';
+    leftp = '(';
+    rightp = ')';
+    leftsb = '[';
+    rightsb = ']';
+    leftb = '{'; 
+    rightb = '}'; 
+    pipe = '|'; 
+    /*inhibited_chars = '"' | '#' | ''' | ',' | '.' | ':' | ';' | '<' | '>' | '@' | '[' | '\' | ']' | '{' | '|' | '}';*/
+    plus = '+';    
+    minus = '-';
+    mult = '*';
+    div = '/';
+    not = 'not';
+    and = 'and';
+    or = 'or';
+    xor = 'xor';
+    implies = 'implies';
+    equal = '=';
+    not_equal = '<>';
+    less = '<';
+    less_or_equal = '<=';
+    more = '>';
+    more_or_equal = '>=';
+    if = 'if';
+    iterate = 'iterate';
+    then = 'then';
+    else = 'else';
+    endif = 'endif';
+    set = 'Set';
+    bag = 'Bag';
+    sequence = 'Sequence';
+    ordered_set = 'OrderedSet';
+    collection = 'Collection';
+    tuple = 'Tuple';    
+    /*inv = 'inv:' (sp | cr | nl)*;*/
+    inv = 'inv'; 
+    colon = ':';
+    colon2 = '::';
+    in = 'in';
+    let = 'let';  
+    at = '@';
+    pre = 'pre';
+    circumflex = '^';
+    circumflex2 = '^^';
+    question_mark = '?';
+    null = 'null';
+    invalid = 'invalid';
+    blank = (sp | nl | cr)+;
+       
+    /*The next tokens must be in the bottom of all because is is the most general of all*/
+    identifier = char (char | digit | '_')*;
+    
+    
+Ignored Tokens
+    blank;
+	
+Productions
+/************************************--------***********************************************/
+/************************************--Core--***********************************************/
+/************************************--------***********************************************/
+    ocl_expression {-> ocl_expression_c_s} = 
+        {without_let} expression11 
+            {-> expression11.ocl_expression_c_s}
+        | {with_let} [let_exp]:let_exp 
+            {-> let_exp.ocl_expression_c_s};
+
+    let_exp {-> ocl_expression_c_s} = 
+        let [vars]:variable_declaration_and_init_list in [in_expr]:ocl_expression
+            {-> New ocl_expression_c_s.let([vars.variable_declaration_c_s], in_expr.ocl_expression_c_s)};
+    			
+    expression1 {-> ocl_expression_c_s} = 
+        {simple} [simple_exp]:simple_exp 
+            {-> simple_exp.ocl_expression_c_s}
+        | {compound} leftp ocl_expression rightp 
+            {-> ocl_expression.ocl_expression_c_s}
+        /* DOT */
+        /*operation call or implicit collect of an operation over a collection */  
+        | {collect_ope_or_ope_call} [source]:expression1 dot [name]:name leftp [args]:arguments ? rightp 
+            {-> New ocl_expression_c_s.operation_call_or_implicit_collect(source.ocl_expression_c_s, name.name_c_s, [args.ocl_expression_c_s])}
+        /* property or association class call or implicit collect of a property or association class over a collection */                                
+ //       | {assoc_class_call_with_source_or_collect} [source]:expression1 dot [name]:simple_name leftsb [args]:arguments rightsb 
+ //           {-> New ocl_expression_c_s.assoc_class_with_source(source.ocl_expression_c_s, name.simple_name_c_s, [args.ocl_expression_c_s])}
+        | {property_or_navigation_call_or_collect} [source]:expression1 dot [name]:name 
+            {-> New ocl_expression_c_s.navigation_or_property_call_or_implicit_collect(source.ocl_expression_c_s, name.name_c_s)}
+        /*ARROW */
+        | {collection_operation_without_arguments} [source]:expression1 arrow [name]:simple_name leftp rightp 
+            {-> New ocl_expression_c_s.collection_operation_without_arguments(source.ocl_expression_c_s, name.simple_name_c_s)}
+        | {iterator_with_one_or_two_vars} [source]:expression1 arrow [name]:simple_name leftp [vars]:its [body]:ocl_expression rightp 
+            {-> New ocl_expression_c_s.iterator_with_vars(source.ocl_expression_c_s, name.simple_name_c_s, vars.arg_or_it_var, body.ocl_expression_c_s)}
+        | {iterator_no_var_or_operation} [source]:expression1 arrow [name]:simple_name leftp [body_or_args]:arguments rightp 
+            {-> New ocl_expression_c_s.iterator_without_var_or_operation_call(source.ocl_expression_c_s, name.simple_name_c_s, [body_or_args.ocl_expression_c_s])}
+        | {iterate_one_var} [source]:expression1 arrow iterate leftp [var]:variable_declaration semicolon [acc]:variable_declaration_and_init pipe [body]:ocl_expression rightp 
+            {-> New ocl_expression_c_s.iterate(source.ocl_expression_c_s, var.variable_declaration_c_s, acc.variable_declaration_c_s, body.ocl_expression_c_s)}
+        | {iterate_no_var} [source]:expression1 arrow iterate leftp [acc]:variable_declaration_and_init pipe [body]:ocl_expression rightp 
+            {-> New ocl_expression_c_s.iterate(source.ocl_expression_c_s, Null, acc.variable_declaration_c_s, body.ocl_expression_c_s)}
+        /* NO CONTEXT */
+ //       | {assoc_class_call_without_source} [name]:simple_name leftsb [args]:arguments rightsb 
+ //           {-> New ocl_expression_c_s.assoc_class_without_source(name.simple_name_c_s, [args.ocl_expression_c_s])}
+        | {ope_call} [name]:name leftp [args]:arguments rightp 
+            {-> New ocl_expression_c_s.implicit_operation_call(name.name_c_s, [args.ocl_expression_c_s])};
+  
+    expression2 {-> ocl_expression_c_s} = expression1 {-> expression1.ocl_expression_c_s}
+                                            | {not} not [arg]:expression2  {-> New ocl_expression_c_s.not(arg.ocl_expression_c_s)}
+                                            | {unary_minus} minus [arg]:expression2 {-> New ocl_expression_c_s.unary_minus(arg.ocl_expression_c_s)};				  
+    				   				
+    expression3 {-> ocl_expression_c_s} = expression2 {-> expression2.ocl_expression_c_s} 
+                                    | {div} [arg1]:expression3 [op]:div [arg2]:expression2 {-> New ocl_expression_c_s.div(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)}
+                                    | {mult} [arg1]:expression3 [op]:mult [arg2]:expression2 {-> New ocl_expression_c_s.mult(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)};
+    
+    expression4 {-> ocl_expression_c_s} = expression3 {-> expression3.ocl_expression_c_s}
+                                    | {plus} [arg1]:expression4 [op]:plus [arg2]:expression3 {-> New ocl_expression_c_s.plus(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)}
+                                    | {minus} [arg1]:expression4 [op]:minus [arg2]:expression3 {-> New ocl_expression_c_s.minus(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)};
+    				
+    expression5 {-> ocl_expression_c_s} = 
+            expression4 {-> expression4.ocl_expression_c_s}
+            | {if} if [condition]:ocl_expression then [then_expr]:ocl_expression else [else_expr]:ocl_expression endif {-> New ocl_expression_c_s.if(condition.ocl_expression_c_s, then_expr.ocl_expression_c_s, else_expr.ocl_expression_c_s)};
+    				
+    expression6 {-> ocl_expression_c_s} = expression5 {-> expression5.ocl_expression_c_s}
+                                    | {less} [arg1]:expression6 [op]:less [arg2]:expression5 {-> New ocl_expression_c_s.less(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)}
+                                    | {more} [arg1]:expression6 [op]:more [arg2]:expression5 {-> New ocl_expression_c_s.more(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)}
+                                    | {less_or_equal} [arg1]:expression6 [op]:less_or_equal [arg2]:expression5 {-> New ocl_expression_c_s.less_or_equal(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)}
+                                    | {more_or_equal} [arg1]:expression6 [op]:more_or_equal [arg2]:expression5 {-> New ocl_expression_c_s.more_or_equal(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)};
+    			  	
+
+    expression7 {-> ocl_expression_c_s} = expression6 {-> expression6.ocl_expression_c_s}
+                                    | {not_equal} [arg1]:expression7 [op]:not_equal [arg2]:expression6 {-> New ocl_expression_c_s.not_equal(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)}
+                                    | {equal} [arg1]:expression7 [op]:equal [arg2]:expression6 {-> New ocl_expression_c_s.equal(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)};
+    
+    expression8 {-> ocl_expression_c_s} = expression7 {-> expression7.ocl_expression_c_s}
+                                    | {and} [arg1]:expression8 [op]:and [arg2]:expression7 {-> New ocl_expression_c_s.and(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)};
+
+    expression9 {-> ocl_expression_c_s} = expression8 {-> expression8.ocl_expression_c_s}
+                                    |{or} [arg1]:expression9 [op]:or [arg2]:expression8 {-> New ocl_expression_c_s.or(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)};
+
+    expression10 {-> ocl_expression_c_s} = expression9 {-> expression9.ocl_expression_c_s}
+                                    |{xor} [arg1]:expression10 [op]:xor [arg2]:expression9 {-> New ocl_expression_c_s.xor(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)};
+    
+    expression11 {-> ocl_expression_c_s} = expression10 {-> expression10.ocl_expression_c_s}
+                                    | {implies} [arg1]:expression11 [op]:implies [arg2]:expression10 {-> New ocl_expression_c_s.implies(arg1.ocl_expression_c_s, arg2.ocl_expression_c_s)};
+
+    var_dec_and_pipe {-> variable_declaration_c_s}      = {without_type} [name]:simple_name pipe {-> New variable_declaration_c_s.no_typed_no_init(name.simple_name_c_s)}
+                                                        | {with_type} [name]:simple_name colon [type]:type pipe {-> New variable_declaration_c_s.typed(name.simple_name_c_s, type.type_c_s)};
+
+    its { -> arg_or_it_var } = {one_it} [var]:var_dec_and_pipe 
+                                { -> New arg_or_it_var.its([var.variable_declaration_c_s])}
+                            | {typed_it_and_other_it} [var1]:variable_declaration_and_type comma [var2]:var_dec_and_pipe 
+                                { -> New arg_or_it_var.its([var1.variable_declaration_c_s, var2.variable_declaration_c_s])}
+                            | {untyped_it_and_other_it} [undeclared_variable_exp]:ocl_expression comma [var2]:var_dec_and_pipe
+                                { -> New arg_or_it_var.untyped_it_and_other_it(undeclared_variable_exp.ocl_expression_c_s, var2.variable_declaration_c_s)};
+
+    
+
+/************************************------------*****************************************/
+/************************************--Literals--*****************************************/
+/************************************------------*****************************************/
+
+    simple_exp {-> ocl_expression_c_s} = 
+            {name} [expr]:name
+                    {-> New ocl_expression_c_s.name(expr.name_c_s)}
+            | {collection_type} [type]:collection_type
+                    {-> New ocl_expression_c_s.type(type.type_c_s)}
+            | {tuple_type} [type]:tuple_type
+                    {-> New ocl_expression_c_s.type(type.type_c_s)}
+            | {collection_literal} [expr]:collection_literal_exp 
+                    {-> expr.ocl_expression_c_s}
+            | {tuple_literal} [expr]:tuple_literal_exp 
+                    {-> expr.ocl_expression_c_s}
+            | {primitive_literal} [expr]:primitive_literal_exp 
+                    {-> expr.ocl_expression_c_s}
+            | {null_literal} null
+                    {-> New ocl_expression_c_s.null_literal()}
+            | {invalid_literal} invalid
+                    {-> New ocl_expression_c_s.invalid_literal()};
+
+    collection_literal_exp {-> ocl_expression_c_s} = 
+            {set} set leftb [literals]:collection_literal_parts ? rightb 
+                    {-> New ocl_expression_c_s.set_literal([literals.collection_literal_part_c_s])}
+            | {bag} bag leftb [literals]:collection_literal_parts ? rightb 
+                    {-> New ocl_expression_c_s.bag_literal([literals.collection_literal_part_c_s])}
+            | {sequence} sequence leftb [literals]:collection_literal_parts ? rightb 
+                    {-> New ocl_expression_c_s.sequence_literal([literals.collection_literal_part_c_s])}
+            | {ordered_set} ordered_set leftb [literals]:collection_literal_parts ? rightb 
+                    {-> New ocl_expression_c_s.ordered_set_literal([literals.collection_literal_part_c_s])};
+ 
+    collection_literal_parts {-> collection_literal_part_c_s*} = 
+            {one_element} [elem]:collection_literal_part 
+                    {-> [elem.collection_literal_part_c_s]}
+            | {more_element} [elem]:collection_literal_part comma [rest_elems]:collection_literal_parts
+                    {-> [elem.collection_literal_part_c_s, rest_elems.collection_literal_part_c_s]};
+    
+    collection_literal_part {-> collection_literal_part_c_s} = 
+            {range} [expr]:collection_range 
+                {-> New collection_literal_part_c_s.range(expr.collection_range_c_s)}
+            | {ocl_expression} [expr]:ocl_expression 
+                {-> New collection_literal_part_c_s.ocl_expression(expr.ocl_expression_c_s)};
+
+    collection_range {-> collection_range_c_s} = 
+        [expression1]:ocl_expression double_dot [expression2]:ocl_expression 
+            {-> New collection_range_c_s(expression1.ocl_expression_c_s, expression2.ocl_expression_c_s)};
+
+    primitive_literal_exp {-> ocl_expression_c_s} = 
+            {integer} [value]:integer
+                    {-> New ocl_expression_c_s.integer_literal(value)}
+            | {real} [value]:real
+                    {-> New ocl_expression_c_s.real_literal(value)}
+            | {string1} [value]:string
+                    {-> New ocl_expression_c_s.string1_literal(value)}
+            | {string2} [value]:string2
+                    {-> New ocl_expression_c_s.string2_literal(value)}
+            | {true} true
+                    {-> New ocl_expression_c_s.true_literal()}
+            | {false} false
+                    {-> New ocl_expression_c_s.false_literal()};
+
+    tuple_literal_exp {-> ocl_expression_c_s} = 
+        tuple leftb [vars]:variable_declaration_and_init_list rightb 
+            {-> New ocl_expression_c_s.tuple_literal([vars.variable_declaration_c_s])};
+
+
+/************************************---------------------*****************************************/
+/************************************--Types & variables--*****************************************/
+/************************************---------------------*****************************************/
+
+    variable_declaration_and_type {-> variable_declaration_c_s} = [name]:simple_name colon [type]:type {-> New variable_declaration_c_s.typed(name.simple_name_c_s, type.type_c_s)};
+
+    variable_declaration_list {-> variable_declaration_c_s*} = 
+        {more} [var]:variable_declaration comma [rest_vars]:variable_declaration_list 
+            {-> [var.variable_declaration_c_s, rest_vars.variable_declaration_c_s]}
+        | {one} [var]:variable_declaration 
+            {-> [var.variable_declaration_c_s]};
+
+    variable_declaration {-> variable_declaration_c_s} =  
+        {with_type} [name]:simple_name colon [type]:type 
+            {-> New variable_declaration_c_s.typed(name.simple_name_c_s, type.type_c_s)}
+        | {without_type} [name]:simple_name 
+            {-> New variable_declaration_c_s.no_typed_no_init(name.simple_name_c_s)};
+
+    variable_declaration_and_init_list {-> variable_declaration_c_s*} = 
+        {more} [var]:variable_declaration_and_init comma [rest_vars]:variable_declaration_and_init_list 
+            {-> [var.variable_declaration_c_s, rest_vars.variable_declaration_c_s]}
+        | {one} [var]:variable_declaration_and_init 
+            {-> [var.variable_declaration_c_s]};
+
+    variable_declaration_and_init {-> variable_declaration_c_s} = 
+        {with_type} [name]:simple_name colon [type]:type equal [expr]:ocl_expression 
+            {-> New variable_declaration_c_s.typed_and_init(name.simple_name_c_s, type.type_c_s, expr.ocl_expression_c_s)}
+        | {without_type} [name]:simple_name equal [expr]:ocl_expression
+            {-> New variable_declaration_c_s.init(name.simple_name_c_s, expr.ocl_expression_c_s)};
+
+    type {-> type_c_s} = 
+        {path} [type]:name 
+            {-> New type_c_s.path(type.name_c_s)}
+        | {collection} [type]:collection_type 
+            {-> type.type_c_s}
+        | {tuple} [type]:tuple_type 
+            {-> type.type_c_s};
+
+    collection_type {-> type_c_s} = 
+        {set} set leftp type rightp 
+            {-> New type_c_s.set(type.type_c_s)}
+        | {bag} bag leftp type rightp 
+            {-> New type_c_s.bag(type.type_c_s)}
+        | {sequence} sequence leftp type rightp 
+            {-> New type_c_s.sequence(type.type_c_s)} 
+        | {collection} collection leftp type rightp 
+            {-> New type_c_s.collection(type.type_c_s)} 
+        | {ordered_set} ordered_set leftp type rightp 
+            {-> New type_c_s.ordered_set(type.type_c_s)};
+
+    tuple_type {-> type_c_s} = 
+        {tuple} tuple leftp [vars]:variable_declaration_list ? rightp 
+            {-> New type_c_s.tuple([vars.variable_declaration_c_s])};
+
+
+
+/************************************----------*****************************************/
+/************************************--others--*****************************************/
+/************************************----------*****************************************/
+    simple_name {-> simple_name_c_s} = [value]:identifier {-> New simple_name_c_s.simple(value)};
+
+    path_name {-> path_name_c_s} = [name1]:simple_name colon2 [name2]:simple_name [rest_names]:rest_path_name {-> New path_name_c_s(name1.simple_name_c_s, [name2.simple_name_c_s, rest_names.simple_name_c_s])};
+    rest_path_name {-> simple_name_c_s*} = [name1]:simple_name colon2 [name2]:simple_name [rest_names]:rest_path_name {-> [name1.simple_name_c_s, name2.simple_name_c_s, rest_names.simple_name_c_s]}
+                                                |{no_element} {-> []};
+
+    name {-> name_c_s} = {simple_name} [name]:simple_name {-> New name_c_s.simple_name(name.simple_name_c_s)}
+                | {path_name} [name]:path_name {-> New name_c_s.path_name(name.path_name_c_s)};
+
+    arguments {-> ocl_expression_c_s*} = {more} [arg]:ocl_expression comma [rest_args]:arguments {-> [arg.ocl_expression_c_s, rest_args.ocl_expression_c_s]}
+                                    | {one} [arg]:ocl_expression {-> [arg.ocl_expression_c_s]};
+
+
+/************************************-------------------*****************************************/
+/************************************--Not implemented--*****************************************/
+/************************************-------------------*****************************************/
+/*
+    is_marked_pre_c_s = at pre;
+    
+    ocl_message_exp_c_s = {message1} ocl_expression_c_s circumflex2 simple_name_c_s leftp ocl_message_arguments_c_s? rightp
+                        | {message2} ocl_expression_c_s circumflex simple_name_c_s leftp ocl_message_arguments_c_s? rightp;
+
+    ocl_message_arguments_c_s = {more} ocl_message_arg_c_s comma ocl_message_arguments_c_s
+                                | {one} ocl_message_arg_c_s;
+
+    ocl_message_arg_c_s = {argument1} question_mark colon type_c_s
+                        | {argument2} question_mark
+                        | {argument3} ocl_expression_c_s;
+
+*/
+
+
+/************************************************************************************************/
+/************************************-------------------*****************************************/
+/************************************--ABSTRACT SYNTAX--*****************************************/
+/************************************-------------------*****************************************/
+/************************************************************************************************/
+
+Abstract Syntax Tree
+
+    ocl_expression_c_s = 
+        {not} ocl_expression_c_s
+        | {unary_minus} ocl_expression_c_s			  
+        | {div} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {mult} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {plus} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {minus} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {less} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {more} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {less_or_equal} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {more_or_equal} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {not_equal} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {equal} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {and} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {or} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {xor} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {implies} [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s
+        | {implicit_operation_call} name_c_s [args]:ocl_expression_c_s *
+        /* SQUARE BRACKETS */
+        /* not implemented*/
+//        | {assoc_class_with_source} [source]:ocl_expression_c_s simple_name_c_s [args]:ocl_expression_c_s +
+        /* not implemented*/
+//        | {assoc_class_without_source} simple_name_c_s [args]:ocl_expression_c_s +
+        /* ARROW */
+        | {collection_operation_without_arguments} [source]:ocl_expression_c_s simple_name_c_s
+        | {iterator_with_vars} [source]:ocl_expression_c_s simple_name_c_s [vars]:arg_or_it_var [body]:ocl_expression_c_s
+        | {iterator_without_var_or_operation_call} [source]:ocl_expression_c_s simple_name_c_s [body_or_args]:ocl_expression_c_s *
+
+        | {iterate} [source]:ocl_expression_c_s [var]:variable_declaration_c_s ? [acc]:variable_declaration_c_s [body]:ocl_expression_c_s
+
+        /* DOT */
+        /* operation call or implicit collect of an operation over a collection */                  
+        | {operation_call_or_implicit_collect} [source]:ocl_expression_c_s name_c_s [args]:ocl_expression_c_s *
+        /* navigation call or implicit collect of a navigation over a collection */                                
+        | {navigation_or_property_call_or_implicit_collect} [source]:ocl_expression_c_s name_c_s
+        /*
+        / name is mapped to:
+        /    + EnumLiteralExp if the environment says that name is a enumLiteral
+        /    + VariableExp if is a variable
+        /    + AssociationEndCallExp if is an association end 
+        /    + AttributeCallExp if is an attribute
+        /    + TypeExp if is an Classifier (the parser is unable to distinguish a class name of a 
+        / variable name
+        / If name is unknown in that enviroment, is mapped to UndeclaredSimpleName, that
+        / can only be used as untyped iterator variable
+        */
+        | {name} [name]:name_c_s
+        | {type} [type]:type_c_s
+        /*
+        / is mapped to CollectionLiteralExp (there is no collection literals of type collection!)
+        */
+        | {set_literal} [elements]:collection_literal_part_c_s *
+        | {bag_literal} [elements]:collection_literal_part_c_s *
+        | {sequence_literal} [elements]:collection_literal_part_c_s *
+        | {ordered_set_literal} [elements]:collection_literal_part_c_s *
+
+        /*
+        / is mapped to TupleLiteralExp
+        */
+        | {tuple_literal} [vars]:variable_declaration_c_s +
+        
+        /*is mapped to IntegerLiteralExp*/
+        | {integer_literal} integer
+        /*is mapped to RealLiteralExp*/
+        | {real_literal} real
+        /*is mapped to StringLiteralExp*/
+        | {string1_literal} string
+        /*is mapped to StringLiteralExp*/
+        | {string2_literal} string2
+        /*is mapped to BooleanLiteralExp*/
+        | {true_literal}
+        /*is mapped to BooleanLiteralExp*/
+        | {false_literal}
+
+        /*is mapped to NullLiteralExp*/
+        | {null_literal}
+        /*is mapped to InvalidLiteralExp*/
+        | {invalid_literal}
+
+        /*
+        / is mapped to LetExp
+        */
+        | {let} [let_vars]:variable_declaration_c_s + [in_expr]:ocl_expression_c_s
+        /*
+        / is mapped to IfExp
+        */
+        | {if} [condition]:ocl_expression_c_s [then_expr]:ocl_expression_c_s [else_expr]:ocl_expression_c_s;
+//        | {ocl_message} ocl_message_exp_c_s
+
+    arg_or_it_var = 
+        {its} [vars]:variable_declaration_c_s +
+        | {untyped_it_and_other_it} [undeclared_variable_exp]:ocl_expression_c_s [var2]:variable_declaration_c_s;
+
+
+
+    /*is mapped to String*/
+    simple_name_c_s = {simple} identifier;
+
+    /*path_name_c_s = simple_name_c_s (colon2 path_name_c_s) ? ;*/
+    /*is mapped to List<String>*/
+    path_name_c_s = [first_name]:simple_name_c_s [rest_names]:simple_name_c_s +;
+
+    /*is mapped to List<String>*/
+    name_c_s = {simple_name} simple_name_c_s
+                | {path_name} path_name_c_s;
+        
+    /*is mapped to CollectionLiteralPart*/
+    collection_literal_part_c_s = {range} collection_range_c_s
+                                | {ocl_expression} ocl_expression_c_s;
+
+    /*is mapped to CollectionRange*/
+    collection_range_c_s = [ocl_expression_c_s1]:ocl_expression_c_s [ocl_expression_c_s2]:ocl_expression_c_s;
+
+    /*is mapped to Variable*/
+    variable_declaration_c_s =  
+            {typed_and_init} [name]:simple_name_c_s [type]:type_c_s [value]:ocl_expression_c_s
+            | {typed} [name]:simple_name_c_s [type]:type_c_s
+            | {init} [name]:simple_name_c_s [value]:ocl_expression_c_s
+            | {no_typed_no_init} [name]:simple_name_c_s;
+
+    /*is mapped to Classifier (path case), a CollectionType (collection cases) or TupleType (tuple case)*/
+    type_c_s = {path} name_c_s
+            | {set} type_c_s
+            | {bag} type_c_s
+            | {sequence} type_c_s
+            | {collection} type_c_s
+            | {ordered_set} type_c_s
+            | {tuple} [elems]:variable_declaration_c_s *;
+
+    /*is not mapped mapped*/
+    is_marked_pre_c_s = at pre;
+
+    /*not implemented*/
+ //   ocl_message_exp_c_s = {message1} ocl_expression_c_s circumflex2 simple_name_c_s leftp ocl_message_arguments_c_s? rightp
+ //                       | {message2} ocl_expression_c_s circumflex simple_name_c_s leftp ocl_message_arguments_c_s? rightp;
+
+    /*not implemented*/
+ //   ocl_message_arguments_c_s = {more} ocl_message_arg_c_s comma ocl_message_arguments_c_s
+ //                               | {one} ocl_message_arg_c_s;
+
+    /*not implemented*/
+ //   ocl_message_arg_c_s = {argument1} question_mark colon type_c_s
+ //                       | {argument2} question_mark
+ //                       | {argument3} ocl_expression_c_s;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action>
+        <actionName>CUSTOM-update version</actionName>
+        <displayName>update version</displayName>
+        <goals>
+            <goal>versions:update-child-modules</goal>
+            <goal>-N</goal>
+        </goals>
+        <properties>
+            <Env.MAVEN_OPTS>-Xms256m -Xmx1024m</Env.MAVEN_OPTS>
+        </properties>
+    </action>
+</actions>

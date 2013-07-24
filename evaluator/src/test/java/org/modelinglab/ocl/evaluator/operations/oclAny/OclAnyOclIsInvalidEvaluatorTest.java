@@ -1,0 +1,28 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.modelinglab.ocl.evaluator.operations.oclAny;
+
+import org.junit.Test;
+import org.modelinglab.ocl.core.standard.operations.oclAny.OclIsInvalid;
+import org.modelinglab.ocl.evaluator.operations.AbstractUnaryOperationTest;
+import static org.junit.Assert.*;
+
+/**
+ *
+ * @author Gonzalo Ortiz Jaureguizar
+ */
+public class OclAnyOclIsInvalidEvaluatorTest extends AbstractUnaryOperationTest {
+    
+    public OclAnyOclIsInvalidEvaluatorTest() {
+        super(OclIsInvalid.getInstance());
+    }
+
+    @Test
+    public void test() throws Exception {
+        executeTest(invalid, trueVal);
+        executeTest(nullVal, falseVal);
+        executeTest(trueVal, falseVal);
+    }
+}

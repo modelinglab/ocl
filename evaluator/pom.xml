@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>ocl</artifactId>
+        <groupId>org.modelinglab.ocl</groupId>
+        <version>1.0.6-SNAPSHOT</version>
+    </parent>
+    <artifactId>evaluator</artifactId>
+    <name>OCL Eval</name>
+    
+    <description>
+        This is the Modelinglab's OCL Evaluator. This evaluator is designed to be modular in the sense that
+        the object model (environment) where the OCL expression is evaluated is injected by an external module
+        called "Object Provider".
+        For example, this environment can be stored in ram memory or in a relational database.
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>iterators</artifactId>
+                    <groupId>org.modelinglab.utils</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>utils</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>parser</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+</project>

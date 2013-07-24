@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.modelinglab</groupId>
+        <artifactId>general-parent</artifactId>
+        <version>1.0.8</version>
+    </parent>
+    <groupId>org.modelinglab.ocl</groupId>
+    <artifactId>ocl</artifactId>
+    <version>1.0.6-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>OCL (POM)</name>
+    
+    <scm>
+        <developerConnection>scm:svn:svn+ssh://software.imdea.org/srv/svn/mda/code/maven/main-tools/ocl/trunk/</developerConnection>
+    </scm>
+    
+    <modules>
+        <module>ext</module>
+        <module>providers</module>
+        <module>core</module>
+        <module>evaluator</module>
+        <module>parser</module>
+        <module>utils</module>
+    </modules>
+    
+    <dependencyManagement>
+        <dependencies>
+            <!-- own group dependencies -->
+            <dependency>
+                <groupId>org.modelinglab.ocl</groupId>
+                <artifactId>core</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.modelinglab.ocl</groupId>
+                <artifactId>parser</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.modelinglab.ocl</groupId>
+                <artifactId>evaluator</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.modelinglab.ocl</groupId>
+                <artifactId>utils</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
+            
+            <!-- General modelinglab tools dependencies-->
+            <dependency>
+                <groupId>org.modelinglab.utils</groupId>
+                <artifactId>m2m</artifactId>
+                <version>1.0.4-SNAPSHOT</version>
+                <type>jar</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
