@@ -13,7 +13,7 @@
     <name>OCL (POM)</name>
     
     <scm>
-        <developerConnection>scm:svn:svn+ssh://software.imdea.org/srv/svn/mda/code/maven/main-tools/ocl/trunk/</developerConnection>
+        <developerConnection>scm:git:https://github.com/modelinglab/ocl.git</developerConnection>
     </scm>
     
     <modules>
