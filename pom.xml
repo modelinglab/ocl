@@ -21,6 +21,11 @@
         <module>utils</module>
     </modules>
     
+    <scm>
+        <developerConnection>scm:git:ssh://github.com/modelinglab/ocl.git</developerConnection>
+        <connection>scm:git:https://github.com/modelinglab/ocl.git</connection>
+    </scm>
+    
     <dependencyManagement>
         <dependencies>
             <!-- own group dependencies -->
