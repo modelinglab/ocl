@@ -188,6 +188,10 @@ public class UmlClass extends Classifier {
         return ownedAssociationEnds.remove(asso);
     }
 
+    public final Iterable<Property> getOwnedProperties() {
+        return Iterables.concat(getOwnedAttributes(), getOwnedAssociationEnds());
+    }
+    
     /**
      * 
      * @return The {@link Attribute} owned by a class. These do not include the inherited attributes.

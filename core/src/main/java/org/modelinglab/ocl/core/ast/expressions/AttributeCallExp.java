@@ -5,13 +5,11 @@
 package org.modelinglab.ocl.core.ast.expressions;
 
 import com.google.common.base.Preconditions;
-import java.util.Collection;
 import org.modelinglab.ocl.core.ast.Attribute;
 import org.modelinglab.ocl.core.ast.UmlObject;
 import org.modelinglab.ocl.core.ast.types.Classifier;
 import org.modelinglab.ocl.core.ast.utils.OclExpressionsVisitor;
 import org.modelinglab.ocl.core.ast.utils.OclVisitor;
-import org.modelinglab.ocl.core.exceptions.IllegalOclExpression;
 import org.modelinglab.ocl.core.exceptions.OclEvaluationException;
 import org.modelinglab.ocl.core.values.OclValue;
 
