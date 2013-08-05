@@ -56,6 +56,7 @@ public abstract class OclExpression extends TypedElement implements Cloneable {
      * @see OclCorrectionChecker
      */
     public String toText() throws IllegalOclExpression {
+        checkIsValid();
         return toString();
     }
 

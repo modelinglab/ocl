@@ -7,6 +7,7 @@ package org.modelinglab.ocl.core.ast.expressions;
 import org.modelinglab.ocl.core.ast.Element;
 import java.util.*;
 import javax.annotation.Nonnull;
+import org.modelinglab.ocl.core.exceptions.IllegalOclExpression;
 
 /**
  *
@@ -83,6 +84,34 @@ public abstract class LoopExp extends CallExp {
         result.add(body);
         result.addAll(getIterators());
         return result;
+    }
+
+    @Override
+    public void checkIsValid() throws IllegalOclExpression {
+        super.checkIsValid();
+        
+        assert getSource() != null;
+        if (!getSource().getType().isCollection()) {
+            throw new IllegalOclExpression(this, "The source part of a LoopExp must have a collection static type");
+        }
+        
+        if (body == null) {
+            throw new IllegalOclExpression(this, "The body part of a LoopExp must defined");
+        }
+        body.checkIsValid();
+        
+        for (final Variable variable : iterators) {
+            VariableExp varExp = new VariableExp(variable);
+            varExp.checkIsValid();
+        }
+        if (iterators.size() > 2) {
+            throw new IllegalOclExpression(this, "A LoopExp can containt at most two iterator variables");
+        }
+        if (iterators.size() == 2) {
+            if (iterators.get(0).getName().equals(iterators.get(1).getName())) {
+                throw new IllegalOclExpression(this, "Iterator variables must have different names");
+            } 
+        }
     }
 
     public boolean equals(LoopExp other) {

@@ -100,6 +100,29 @@ public abstract class IteratorExp extends LoopExp {
         sb.append(')');
         return sb.toString();
     }
+    
+    @Override
+    public String toText() {
+        checkIsValid();
+        StringBuilder sb = new StringBuilder();
+        
+        assert getSource() != null;
+        sb.append(source.toString());
+        
+        sb.append("->");
+
+        sb.append(getName()).append('(');
+        
+        if (!getIterators().isEmpty()) {
+            sb.append(Joiner.on(", ").join(getIterators())).append(" | ");
+        }
+        
+        assert getBody() != null;
+        
+        sb.append(')');
+        
+        return sb.toString();
+    }
 
     @Override
     public <Result, Arg> Result accept(OclVisitor<Result, Arg> visitor, Arg arguments) {

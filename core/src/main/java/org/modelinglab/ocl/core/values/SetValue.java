@@ -4,8 +4,6 @@
  */
 package org.modelinglab.ocl.core.values;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import java.util.*;
 import org.modelinglab.ocl.core.ast.types.Classifier;
 import org.modelinglab.ocl.core.ast.types.SetType;

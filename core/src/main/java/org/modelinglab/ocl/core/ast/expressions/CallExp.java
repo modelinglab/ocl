@@ -7,6 +7,7 @@ package org.modelinglab.ocl.core.ast.expressions;
 import org.modelinglab.ocl.core.ast.Element;
 import java.util.List;
 import javax.annotation.Nonnull;
+import org.modelinglab.ocl.core.exceptions.IllegalOclExpression;
 
 /**
  *
@@ -46,6 +47,14 @@ public abstract class CallExp extends OclExpression {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void checkIsValid() throws IllegalOclExpression {
+        if (source == null) {
+            throw new IllegalOclExpression(this, "The source part of an CallExp has to be defined");
+        }
+        source.checkIsValid();
     }
 
     @Override

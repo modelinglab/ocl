@@ -11,11 +11,12 @@ import java.util.Collection;
  *
  * @author Gonzalo Ortiz Jaureguizar (gortiz at software.imdea.org)
  */
-public class OrderedSet<E> extends ArrayList<E> {
+public final class OrderedSet<E> extends ArrayList<E> {
     private static final long serialVersionUID = 1L;
 
     public OrderedSet(Collection<? extends E> c) {
-        super(c);
+        super(c.size());
+        addAll(c);
     }
 
     public OrderedSet() {
