@@ -4,11 +4,10 @@
  */
 package org.modelinglab.ocl.core.values;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import org.modelinglab.ocl.core.ast.types.Classifier;
 import org.modelinglab.ocl.core.ast.types.OrderedSetType;
+import org.modelinglab.ocl.core.ast.types.SetType;
 import org.modelinglab.ocl.core.ast.utils.OrderedSet;
 import org.modelinglab.ocl.core.values.utils.ValueVisitor;
 
@@ -36,6 +35,14 @@ public final class OrderedSetValue<E extends OclValue<?>> extends OclValue<List<
         this.type = new OrderedSetType(value.getType().getElementType());
     }
 
+    private static <S> List<S> getValueList(List<S> value, boolean isInmutable) {
+        if (isInmutable) {
+            assert (new HashSet<>(value)).size() == value.size();
+            return value;
+        }
+        return new OrderedSet<>(value);
+    }
+    
     @Override
     public <Result, Arg> Result accept(ValueVisitor<Result, Arg> visitor, Arg arg) {
         return visitor.visit(this, arg);

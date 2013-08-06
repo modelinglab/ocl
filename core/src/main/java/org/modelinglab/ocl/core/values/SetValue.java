@@ -19,18 +19,26 @@ public final class SetValue<E extends OclValue<?>> extends OclValue<List<E>> {
 
     private final SetType type;
     public SetValue(Collection<E> value, Classifier elementType) {
-        super(new ArrayList<E>(new HashSet<>(value)));
+        super(new ArrayList<>(new HashSet<>(value)));
         this.type = new SetType(elementType);
     }
     
     public SetValue(List<E> value, Classifier elementType, boolean isInmutable) {
-        super(value);
+        super(getValueList(value, isInmutable));
         this.type = new SetType(elementType);
     }
     
     public SetValue(OrderedSetValue<E> ordered) {
         super(ordered.getValue());
         this.type = new SetType(ordered.getType().getElementType());
+    }
+    
+    private static <S> List<S> getValueList(List<S> value, boolean isInmutable) {
+        if (isInmutable) {
+            assert (new HashSet<>(value)).size() == value.size();
+            return value;
+        }
+        return new ArrayList<>(new HashSet(value));
     }
     
     @Override
