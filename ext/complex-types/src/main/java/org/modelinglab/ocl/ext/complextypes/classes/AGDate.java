@@ -7,6 +7,7 @@ package org.modelinglab.ocl.ext.complextypes.classes;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 import org.joda.time.DateTime;
 import org.modelinglab.ocl.core.ast.Attribute;
 import org.modelinglab.ocl.core.ast.UmlClass;
@@ -115,7 +116,7 @@ public class AGDate extends UmlClass {
                 return false;
             }
             final AGDateObject other = (AGDateObject) obj;
-            if (id.getValue() != other.id.getValue()) {
+            if (!Objects.equals(this.id, other.id)) {
                 return false;
             }
             return true;
