@@ -1,5 +1,6 @@
 
 import java.util.Collections;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.modelinglab.ocl.core.ast.StaticEnvironment;
 import org.modelinglab.ocl.core.ast.UmlClass;
@@ -29,8 +30,9 @@ import org.modelinglab.ocl.parser.OclParser;
 /**
  *
  */
-public class Chu {
+public class ManualTest {
 
+    @Ignore
     @Test
     public void chu() throws Exception {
         
