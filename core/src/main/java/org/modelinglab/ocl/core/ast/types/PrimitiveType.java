@@ -33,6 +33,12 @@ public class PrimitiveType extends DataType {
         classifierType = new ClassifierType(this);
     }
 
+    /**
+     * @param primitiveKind
+     * @return
+     * @deprecated you should use the public final static attributes like {@link #BOOLEAN}, {@link #STRING}, etc.
+     */
+    @Deprecated
     public static PrimitiveType getInstance(PrimitiveKind primitiveKind) {
         switch (primitiveKind) {
             case BOOLEAN:
