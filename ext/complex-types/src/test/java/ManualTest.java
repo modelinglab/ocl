@@ -34,7 +34,7 @@ public class ManualTest {
 
     @Ignore
     @Test
-    public void chu() throws Exception {
+    public void myTest() throws Exception {
         
         StaticEnvironment env = new StaticEnvironment(ComplexTypesLibrary.createStore());
         
@@ -46,11 +46,9 @@ public class ManualTest {
         
         assert AGDate.INSTANCE.equals(AGDate.INSTANCE);
         
-        OclExpression exp = parser.parse("Date.now().truncate(TimeUnit::DAY)");
+        OclExpression exp;
         
         OclEvaluator evaluator = new OclEvaluator(new SequentialIteratorEvaluationAlgorithmProvider());
-        
-        assert exp != null;
         
         UserEvaluationEnvironment uee = new UserEvaluationEnvironment(env, new InstanceProvider() {
 
@@ -74,16 +72,9 @@ public class ManualTest {
         
         IVariableTable varTable = new VariableTable();
         
-        OclValue<?> result = evaluator.evaluate(exp, uee, varTable);
-        OclValue<?> result2 = evaluator.evaluate(exp, uee, varTable);
-        
-        AGDateObject dateObject = (AGDateObject) result.getValue();
-        AGDateObject dateObject2 = (AGDateObject) result2.getValue();
-        
-        System.out.println(dateObject.getDate());
-        System.out.println(dateObject2.getDate());
-        
-        exp = parser.parse("Date.now().truncate(TimeUnit::DAY) = Date.now().truncate(TimeUnit::DAY)");
+        exp = parser.parse("Date.now().truncate(TimeUnit::DAY).dayOfWeek()");
         System.out.println(evaluator.evaluate(exp, uee, varTable));
+        
+        
     }
 }
