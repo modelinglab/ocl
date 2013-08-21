@@ -76,11 +76,11 @@ public class DateTestUtils {
     
     private DateTestUtils() {}
     
-    public static boolean testEqual(String oclExpression, Object obj) {
-        return testEqual(oclExpression, obj, emptyVarTable);
+    public static boolean equals(String oclExpression, Object obj) {
+        return equals(oclExpression, obj, emptyVarTable);
     }
     
-    public static boolean testEqual(String oclExpression, Object obj, IVariableTable localVarTable) {
+    public static boolean equals(String oclExpression, Object obj, IVariableTable localVarTable) {
         try {
             parser.getEnv().addScope();
             for (final String varId : localVarTable) {

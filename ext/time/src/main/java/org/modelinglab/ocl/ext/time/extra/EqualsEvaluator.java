@@ -26,7 +26,7 @@ public class EqualsEvaluator extends OperationEvaluator {
     private Method equals;
     
     public EqualsEvaluator(UmlClass classifier, Class<?> clazz) throws SecurityException, NoSuchMethodException {
-        equals = clazz.getMethod("equals", clazz);
+        equals = clazz.getMethod("equals", Object.class);
         this.classifier = classifier;
     }
 

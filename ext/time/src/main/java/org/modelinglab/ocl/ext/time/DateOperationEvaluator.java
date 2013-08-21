@@ -44,12 +44,19 @@ abstract class DateOperationEvaluator extends OperationEvaluator {
             i++;
         }
 
-        Object o;
+        Object result;
         try {
-            o = method.invoke(val, args);
+            Object castedVal;
+            if (val == null)  {
+                castedVal = null;
+            }
+            else {
+                castedVal = DateUtils.translateToJavaObject(val);
+            }
+            result = method.invoke(castedVal, args);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             throw new RuntimeException(ex);
         }
-        return DateUtils.translateToOclObject(o, getEvaluableOperation().getType());
+        return DateUtils.translateToOclObject(result, getEvaluableOperation().getType());
     }
 }

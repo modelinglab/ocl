@@ -10,6 +10,8 @@ import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.modelinglab.ocl.core.ast.Operation;
 import org.modelinglab.ocl.core.ast.OperationsStore;
 import org.modelinglab.ocl.core.ast.UmlClass;
@@ -124,7 +126,9 @@ public class DateLibrary {
             throw new IllegalArgumentException(ex);
         }
 
-        result.add(new EqualsOperation(binder.getUmlClas()));
+        if (!Modifier.isAbstract(clazz.getModifiers())) {
+            result.add(new EqualsOperation(binder.getUmlClas()));
+        }
 
         return result;
     }
@@ -142,11 +146,17 @@ public class DateLibrary {
                 result.add(new ComparableGreaterEvaluator<>(binder.getUmlClas(), Duration.class));
                 result.add(new ComparableGreaterOrEqualEvaluator<>(binder.getUmlClas(), Duration.class));
             }
-            result.add(new EqualsEvaluator(binder.getUmlClas(), clazz));
         } catch (NoSuchMethodException ex) {
             //nothing to do
         } catch (SecurityException ex) {
             throw new IllegalArgumentException(ex);
+        }
+        if (!Modifier.isAbstract(clazz.getModifiers())) {
+            try {
+                result.add(new EqualsEvaluator(binder.getUmlClas(), clazz));
+            } catch (SecurityException | NoSuchMethodException ex) {
+                throw new AssertionError(); //this should not happen
+            }
         }
 
         return result;
