@@ -18,7 +18,7 @@ public class DateDayOfWeekEvaluator extends AbstractDateEvaluator {
 
     @Override
     public OclValue<?> visitDate(AGDateObject val, SwitchArgument arg) {
-        return new EnumValue(AGDayOfWeek.getInstance().getLiteral(val.getJodaDateTime().getDayOfWeek()));
+        return new EnumValue(AGDayOfWeek.getInstance().getLiteral(val.getJodaDateTime().getDayOfWeek() - 1));
     }
 
     @Override
