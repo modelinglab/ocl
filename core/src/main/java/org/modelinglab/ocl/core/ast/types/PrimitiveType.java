@@ -5,9 +5,7 @@
 package org.modelinglab.ocl.core.ast.types;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.concurrent.Immutable;
 import org.modelinglab.ocl.core.ast.utils.ClassifierVisitor;
 import org.modelinglab.ocl.core.ast.utils.OclVisitor;
@@ -20,7 +18,11 @@ import org.modelinglab.ocl.core.ast.utils.OclVisitor;
 public class PrimitiveType extends DataType {
 
     private static final long serialVersionUID = 1L;
-    private static final Map<PrimitiveKind, PrimitiveType> instances = new EnumMap(PrimitiveKind.class);
+    public static final PrimitiveType BOOLEAN = new PrimitiveType(PrimitiveKind.BOOLEAN);
+    public static final PrimitiveType INTEGER = new PrimitiveType(PrimitiveKind.INTEGER);
+    public static final PrimitiveType REAL = new PrimitiveType(PrimitiveKind.REAL);
+    public static final PrimitiveType STRING = new PrimitiveType(PrimitiveKind.STRING);
+    public static final PrimitiveType UNLIMITED_NATURAL = new PrimitiveType(PrimitiveKind.UNLIMITED_NATURAL);
     private final PrimitiveKind kind;
     private final ClassifierType classifierType;
 
@@ -29,13 +31,27 @@ public class PrimitiveType extends DataType {
         classifierType = new ClassifierType(this);
     }
 
+    /**
+     * @param primitiveKind
+     * @return
+     * @deprecated you should use the public final static attributes like {@link #BOOLEAN}, {@link #STRING}, etc.
+     */
+    @Deprecated
     public static PrimitiveType getInstance(PrimitiveKind primitiveKind) {
-        PrimitiveType instance = instances.get(primitiveKind);
-        if (instance == null) {
-            instance = new PrimitiveType(primitiveKind);
-            instances.put(primitiveKind, instance);
+        switch (primitiveKind) {
+            case BOOLEAN:
+                return BOOLEAN;
+            case INTEGER:
+                return INTEGER;
+            case REAL:
+                return REAL;
+            case STRING:
+                return STRING;
+            case UNLIMITED_NATURAL:
+                return UNLIMITED_NATURAL;
+            default:
+                throw new AssertionError(primitiveKind + " not expected");
         }
-        return instance;
     }
 
     @Override
