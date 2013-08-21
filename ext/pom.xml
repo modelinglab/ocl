@@ -13,5 +13,6 @@
 
     <modules>
         <module>complex-types</module>
+        <module>time</module>
     </modules>
 </project>
