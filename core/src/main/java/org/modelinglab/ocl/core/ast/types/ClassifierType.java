@@ -9,6 +9,7 @@ import org.modelinglab.ocl.core.ast.utils.ClassifierVisitor;
 import org.modelinglab.ocl.core.ast.utils.OclVisitor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -72,6 +73,13 @@ public class ClassifierType extends Classifier  {
     }
 
     @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 43 * hash + Objects.hashCode(this.referredClassifier);
+        return hash;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
@@ -79,13 +87,11 @@ public class ClassifierType extends Classifier  {
         if (getClass() != obj.getClass()) {
             return false;
         }
+        final ClassifierType other = (ClassifierType) obj;
+        if (!Objects.equals(this.referredClassifier, other.referredClassifier)) {
+            return false;
+        }
         return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        return hash;
     }
 
     @Override
