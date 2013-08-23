@@ -10,16 +10,17 @@ import org.modelinglab.ocl.core.ast.utils.ClassifierVisitor;
 import org.modelinglab.ocl.core.ast.utils.OclVisitor;
 
 /**
- * A TemplateParameterType is used to refer to generic types in parameterized definitions. It is 
- * used in the standard library to represent the parameterized collection operations. A 
- * TemplateParameterType is usually named “T” (or “T2,” “T3,” and so on, when more than one type 
- * parameter is involved).
- *
+ * A TemplateParameterType is used to refer to generic types in parameterized definitions. It is used in the
+ * standard library to represent the parameterized collection operations. A TemplateParameterType is usually
+ * named “T” (or “T2,” “T3,” and so on, when more than one type parameter is involved).
+ * <p/>
  * @author Gonzalo Ortiz Jaureguizar (gortiz at software.imdea.org)
  */
 public class TemplateParameterType extends Classifier {
 
     private static final long serialVersionUID = 1L;
+    public static final String GENERIC_SOURCE_PARAM_NAME = "SOURCE_TYPE";
+    public static final String GENERIC_COLLECTION_PARAM_NAME = "T";
     private static TemplateParameterType genericCollectionElement;
     private static TemplateParameterType genericSourceElement;
     String specification;
@@ -32,17 +33,17 @@ public class TemplateParameterType extends Classifier {
         super(other);
         specification = other.specification;
     }
- 
+
     public static TemplateParameterType getGenericCollectionElement() {
         if (genericCollectionElement == null) {
-            genericCollectionElement = new TemplateParameterType("T");
+            genericCollectionElement = new TemplateParameterType(GENERIC_COLLECTION_PARAM_NAME);
         }
         return genericCollectionElement;
     }
-    
+
     public static TemplateParameterType getGenericSourceElement() {
         if (genericSourceElement == null) {
-            genericSourceElement = new TemplateParameterType("SOURCE_TYPE");
+            genericSourceElement = new TemplateParameterType(GENERIC_SOURCE_PARAM_NAME);
         }
         return genericSourceElement;
     }
@@ -68,7 +69,8 @@ public class TemplateParameterType extends Classifier {
             return false;
         }
         final TemplateParameterType other = (TemplateParameterType) obj;
-        if ((this.specification == null) ? (other.specification != null) : !this.specification.equals(other.specification)) {
+        if ((this.specification == null) ? (other.specification != null) : !this.specification.
+                equals(other.specification)) {
             return false;
         }
         return true;
@@ -82,22 +84,24 @@ public class TemplateParameterType extends Classifier {
     }
 
     @Override
-    protected boolean conformsToProtected(Classifier conformsTarget, TemplateRestrictions instanciatedTemplates) {
+    protected boolean conformsToProtected(Classifier conformsTarget,
+                                          TemplateRestrictions instanciatedTemplates) {
         return conformsTarget.conformsWithTemplate(this, instanciatedTemplates);
     }
 
     @Override
-    protected boolean conformsToTemplate(TemplateParameterType conformsTarget, TemplateRestrictions instanciatedTemplates) {
+    protected boolean conformsToTemplate(TemplateParameterType conformsTarget,
+                                         TemplateRestrictions instanciatedTemplates) {
         return conformsTarget.getSpecification().equals(getSpecification());
     }
-    
+
     @Override
     public String getName() {
         return getSpecification();
     }
 
     /**
-     * 
+     *
      * @return An un-interpreted opaque definition of the template parameter type.
      */
     public String getSpecification() {
