@@ -4,6 +4,7 @@
  */
 package org.modelinglab.ocl.ext.time;
 
+import java.nio.CharBuffer;
 import java.util.*;
 import javax.annotation.Nullable;
 import org.modelinglab.ocl.core.ast.UmlClass;
@@ -50,6 +51,10 @@ public class DateUtils {
         primitiveTypes.put(boolean.class, PrimitiveType.BOOLEAN);
         primitiveTypes.put(Boolean.class, PrimitiveType.BOOLEAN);
 
+        primitiveTypes.put(CharSequence.class, PrimitiveType.STRING);
+        primitiveTypes.put(CharBuffer.class, PrimitiveType.STRING);
+        primitiveTypes.put(StringBuffer.class, PrimitiveType.STRING);
+        primitiveTypes.put(StringBuilder.class, PrimitiveType.STRING);
         primitiveTypes.put(String.class, PrimitiveType.STRING);
     }
 

@@ -10,8 +10,6 @@ import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.modelinglab.ocl.core.ast.Operation;
 import org.modelinglab.ocl.core.ast.OperationsStore;
 import org.modelinglab.ocl.core.ast.UmlClass;
@@ -111,13 +109,13 @@ public class DateLibrary {
         try {
             Method m = clazz.getMethod("compareTo", clazz);
             if (m != null) {
-                result.add(new ComparableLessEvaluator<>(binder.getUmlClas(), Duration.class).
+                result.add(new ComparableLessEvaluator(binder.getUmlClas(), binder.getJavaClass()).
                         getEvaluableOperation());
-                result.add(new ComparableLessOrEqualEvaluator<>(binder.getUmlClas(), Duration.class).
+                result.add(new ComparableLessOrEqualEvaluator(binder.getUmlClas(), binder.getJavaClass()).
                         getEvaluableOperation());
-                result.add(new ComparableGreaterEvaluator<>(binder.getUmlClas(), Duration.class).
+                result.add(new ComparableGreaterEvaluator(binder.getUmlClas(), binder.getJavaClass()).
                         getEvaluableOperation());
-                result.add(new ComparableGreaterOrEqualEvaluator<>(binder.getUmlClas(), Duration.class).
+                result.add(new ComparableGreaterOrEqualEvaluator(binder.getUmlClas(), binder.getJavaClass()).
                         getEvaluableOperation());
             }
         } catch (NoSuchMethodException ex) {
@@ -141,10 +139,10 @@ public class DateLibrary {
         try {
             Method m = clazz.getMethod("compareTo", clazz);
             if (m != null) {
-                result.add(new ComparableLessEvaluator<>(binder.getUmlClas(), Duration.class));
-                result.add(new ComparableLessOrEqualEvaluator<>(binder.getUmlClas(), Duration.class));
-                result.add(new ComparableGreaterEvaluator<>(binder.getUmlClas(), Duration.class));
-                result.add(new ComparableGreaterOrEqualEvaluator<>(binder.getUmlClas(), Duration.class));
+                result.add(new ComparableLessEvaluator(binder.getUmlClas(), binder.getJavaClass()));
+                result.add(new ComparableLessOrEqualEvaluator(binder.getUmlClas(), binder.getJavaClass()));
+                result.add(new ComparableGreaterEvaluator(binder.getUmlClas(), binder.getJavaClass()));
+                result.add(new ComparableGreaterOrEqualEvaluator(binder.getUmlClas(), binder.getJavaClass()));
             }
         } catch (NoSuchMethodException ex) {
             //nothing to do

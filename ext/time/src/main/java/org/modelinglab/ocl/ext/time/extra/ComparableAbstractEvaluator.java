@@ -21,12 +21,12 @@ import org.modelinglab.ocl.ext.time.DateUtils;
 /**
  *
  */
-public abstract class ComparableAbstractEvaluator<C extends Comparable<C>> extends OperationEvaluator {
+public abstract class ComparableAbstractEvaluator extends OperationEvaluator {
 
     private Method compareTo;
     private UmlClass classifier;
     
-    public ComparableAbstractEvaluator(UmlClass classifier, Class<C> clazz) throws SecurityException, NoSuchMethodException {
+    public ComparableAbstractEvaluator(UmlClass classifier, Class<?> clazz) throws SecurityException, NoSuchMethodException {
         compareTo = clazz.getMethod("compareTo", clazz);
         this.classifier = classifier;
     }

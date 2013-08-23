@@ -67,4 +67,18 @@ public class LocalDateTest {
         assert DateTestUtils.equals("LocalDate.now(clock) = LocalDate.now(clock).minusDays(1)", false, varTable);
     }
     
+    @Test
+    public void testGreaterOrEqual() {
+        Clock c = Clock.fixed(Instant.now(), ZoneId.systemDefault());
+        Classifier clockClassifier = DateUtils.translateToClassifier(Clock.class);
+        OclValue<?> cVal = DateUtils.translateToOclObject(c, clockClassifier);
+        
+        VariableTable varTable = new VariableTable();
+        varTable.createVariable(new Variable("clock", null, clockClassifier), cVal);
+        
+        assert DateTestUtils.equals("LocalDate.now(clock) >= LocalDate.now(clock).minusDays(1)", true, varTable);
+        assert DateTestUtils.equals("LocalDate.now(clock) >= LocalDate.now(clock)", true, varTable);
+        assert DateTestUtils.equals("LocalDate.now(clock) >= LocalDate.now(clock).plusDays(1)", false, varTable);
+    }
+    
 }

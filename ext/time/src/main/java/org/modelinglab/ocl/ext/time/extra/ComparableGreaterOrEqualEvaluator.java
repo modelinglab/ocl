@@ -12,15 +12,15 @@ import org.modelinglab.ocl.core.ast.types.Classifier;
 /**
  *
  */
-public class ComparableGreaterOrEqualEvaluator<C extends Comparable<C>> extends ComparableAbstractEvaluator<C> {
+public class ComparableGreaterOrEqualEvaluator extends ComparableAbstractEvaluator {
 
-    public ComparableGreaterOrEqualEvaluator(UmlClass classifier, Class<C> clazz) throws SecurityException, NoSuchMethodException {
+    public ComparableGreaterOrEqualEvaluator(UmlClass classifier, Class<?> clazz) throws SecurityException, NoSuchMethodException {
         super(classifier, clazz);
     }
 
     @Override
     protected boolean comparableToBoolean(Integer comparableResult) {
-        return comparableResult <= 0;
+        return comparableResult >= 0;
     }
     
     @Override

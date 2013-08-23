@@ -11,9 +11,9 @@ import org.modelinglab.ocl.core.ast.UmlClass;
 /**
  *
  */
-public class ComparableLessOrEqualEvaluator<C extends Comparable<C>> extends ComparableAbstractEvaluator<C> {
+public class ComparableLessOrEqualEvaluator extends ComparableAbstractEvaluator {
 
-    public ComparableLessOrEqualEvaluator(UmlClass classifier, Class<C> clazz) throws SecurityException, NoSuchMethodException {
+    public ComparableLessOrEqualEvaluator(UmlClass classifier, Class<?> clazz) throws SecurityException, NoSuchMethodException {
         super(classifier, clazz);
     }
 
