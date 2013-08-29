@@ -5,3 +5,5 @@
 /providers/memory/target/
 /utils/target/
 /ext/time/target/
+/ext/sql/core/target/
+/ext/sql/serializer/target/

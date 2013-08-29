@@ -36,5 +36,9 @@
             <artifactId>parser</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.modelinglab.ocl</groupId>
+            <artifactId>utils</artifactId>
+        </dependency>
     </dependencies>
 </project>

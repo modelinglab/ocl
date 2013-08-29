@@ -33,8 +33,11 @@
         <dependency>
             <groupId>org.modelinglab.ocl</groupId>
             <artifactId>parser</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.modelinglab.ocl</groupId>
+            <artifactId>utils</artifactId>
         </dependency>
     </dependencies>
 </project>

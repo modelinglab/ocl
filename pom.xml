@@ -53,6 +53,24 @@
                 <version>${project.version}</version>
                 <type>jar</type>
             </dependency>
+            <dependency>
+                <groupId>org.modelinglab.ocl.ext</groupId>
+                <artifactId>complex-types</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.modelinglab.ocl.ext</groupId>
+                <artifactId>time</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.modelinglab.ocl.ext.sql</groupId>
+                <artifactId>core</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+            </dependency>
             
             <!-- General modelinglab tools dependencies-->
             <dependency>
