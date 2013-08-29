@@ -4,17 +4,24 @@
  */
 package org.modelinglab.ocl.ext.complextypes.classes;
 
-import java.util.Calendar;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Objects;
 import org.joda.time.DateTime;
 import org.modelinglab.ocl.core.ast.Attribute;
 import org.modelinglab.ocl.core.ast.UmlClass;
 import org.modelinglab.ocl.core.ast.UmlObject;
+import org.modelinglab.ocl.core.ast.types.Classifier;
 import org.modelinglab.ocl.core.ast.types.PrimitiveType;
 import org.modelinglab.ocl.core.values.IntegerValue;
+import org.modelinglab.ocl.core.values.ObjectValue;
 import org.modelinglab.ocl.core.values.OclValue;
+import org.modelinglab.ocl.core.values.VoidValue;
+import org.modelinglab.ocl.utils.sql.SQLSerializable;
+import org.modelinglab.ocl.utils.sql.SQLSerializer;
 
 /**
  * An AGDate is an UmlClass which represents a point in time. The implementation uses an integer attribute
@@ -36,7 +43,8 @@ public class AGDate extends UmlClass {
         att.setName("time"); //since January 1, 1970, 00:00:00 GMT
         att.setReferredType(PrimitiveType.getInstance(PrimitiveType.PrimitiveKind.INTEGER));
         addOwnedAttribute(att);
-
+        
+        setAnnotation(SQLSerializable.class, new AGDateSQLSerializable());
     }
 
     public static AGDate getInstance() {
@@ -121,5 +129,45 @@ public class AGDate extends UmlClass {
             }
             return true;
         }
+    }
+
+    private static class AGDateSQLSerializable implements SQLSerializable {
+
+        @Override
+        public SQLSerializer getSerializer() {
+            return AGDateSQLSerializer.INSTANCE;
+        }
+
+        @Override
+        public int getSqlType() {
+            return java.sql.Types.TIMESTAMP;
+        }
+        
+    }
+    
+    private static class AGDateSQLSerializer implements SQLSerializer {
+
+        private static AGDateSQLSerializer INSTANCE = new AGDateSQLSerializer();
+        
+        @Override
+        public OclValue<?> fromSQL(ResultSet rs, String columnName, Classifier expectedType) throws SQLException {
+            Date date = rs.getObject(columnName, Date.class);
+            if (date == null) {
+                return VoidValue.instantiate();
+            }
+            else {
+                return new ObjectValue<>(new AGDateObject(date.getTime()));
+            }
+        }
+
+        @Override
+        public void toSQL(PreparedStatement ps, int columnIndex, OclValue<?> val, Classifier staticType) throws SQLException {
+            assert val.getValue() instanceof AGDateObject;
+            AGDateObject obj = (AGDateObject) val.getValue();
+            
+            Timestamp ts = new Timestamp(obj.getTime());
+            ps.setTimestamp(columnIndex, ts);
+        }
+        
     }
 }
