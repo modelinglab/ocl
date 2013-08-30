@@ -82,9 +82,7 @@ public class LocalDateSerializerTest {
         LocalDate original = LocalDate.of(year, month, day);
         Date result = serializer.serialize(original);
         Date expected = createDate(year, month, day);
-        Calendar c = Calendar.getInstance();
-        c.setTime(result);
-
+        
         assert (result.getTime() / MILLIS_IN_A_DAY) == (expected.getTime() / MILLIS_IN_A_DAY) : "serialized(" + original + ") = " + result + " <> " + expected;
     }
 

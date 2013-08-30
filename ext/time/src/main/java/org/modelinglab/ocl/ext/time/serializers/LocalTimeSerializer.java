@@ -5,10 +5,9 @@
 
 package org.modelinglab.ocl.ext.time.serializers;
 
-import java.sql.SQLException;
 import java.sql.Time;
-import java.util.Calendar;
 import org.threeten.bp.LocalTime;
+import org.threeten.bp.temporal.ChronoField;
 
 /**
  *
@@ -27,12 +26,13 @@ public class LocalTimeSerializer extends AbstractWrapperSerializer<Time, LocalTi
 
     @Override
     protected LocalTime unserialize(Time storedValue) {
-        return LocalTime.ofSecondOfDay(storedValue.getTime());
+        return LocalTime.ofSecondOfDay(storedValue.getTime() / 1000);
     }
 
     @Override
     protected Time serialize(LocalTime wrapped) {
-        return new Time(wrapped.getSecond());
+        long milliOfDay = wrapped.getLong(ChronoField.MILLI_OF_DAY);
+        return new Time(milliOfDay);
     }
 
     @Override
