@@ -16,8 +16,8 @@ import org.threeten.bp.zone.*;
 /**
  *
  */
-class MappedClassesProvider {
-    private MappedClassesProvider() {}
+class MappedClassProvider {
+    private MappedClassProvider() {}
     
     public static List<Class<?>> getMappedClasses() {
         Class<?>[] classes = new Class<?>[] {

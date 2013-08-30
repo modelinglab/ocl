@@ -31,14 +31,25 @@ public class ClassBinder<Wrapped> {
         this.methodFilter = methodFilter;
         this.resolver = resolver;
     }
+    
+    /**
+     * This method is called when the UmlClass (or UmlEnum!) is initialized.
+     * 
+     * It can be used to add annotations to the created class.
+     * 
+     * @param clazz 
+     */
+    protected void initializeCreatedClass(UmlClass clazz) {}
 
     public UmlClass getUmlClas() {
         if (umlClass == null) {
             if (javaClass.isEnum()) {
                 umlClass = new UmlWrapperEnum(javaClass, resolver);
+                initializeCreatedClass(umlClass);
             }
             else {
                 umlClass = new UmlWrapperClass(javaClass, resolver);
+                initializeCreatedClass(umlClass);
             }
         }
         return umlClass;

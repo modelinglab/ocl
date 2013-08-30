@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.modelinglab.ocl.ext.time;
 
 import com.google.common.collect.Sets;
@@ -16,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import org.modelinglab.ocl.core.ast.UmlClass;
 import org.modelinglab.ocl.core.ast.types.Classifier;
+import org.modelinglab.ocl.ext.time.serializers.DateSQLSerializerProvider;
+import org.modelinglab.ocl.utils.sql.SQLSerializable;
 
 /**
  *
@@ -28,13 +29,25 @@ public class ClassBinderResolverImpl implements ClassBinderResolver {
 
     private ClassBinderResolverImpl() {
         ignoredClasses = Sets.<Class<?>>newHashSet(Serializable.class);
-        
-        List<Class<?>> mappedClasses = MappedClassesProvider.getMappedClasses();
+
+        List<Class<?>> mappedClasses = MappedClassProvider.getMappedClasses();
         javaClassToClassBinder = new HashMap<>(mappedClasses.size());
         umlClassToClassBinder = new HashMap<>(mappedClasses.size());
-        
+
+        Map<Class<?>, SQLSerializable> serializableMap = DateSQLSerializerProvider.getSerializables();
+
         for (final Class<?> clazz : mappedClasses) {
-            ClassBinder<?> binder = new ClassBinder<>(clazz, ValidTypesMethodFilter.getInstance(), this);
+            ClassBinder<?> binder;
+            if (serializableMap.containsKey(clazz)) {
+                binder = new SerializableClassBinder<>(
+                        serializableMap.get(clazz), clazz, 
+                        ValidTypesMethodFilter.
+                        getInstance(), 
+                        this);
+            }
+            else {
+                binder = new ClassBinder<>(clazz, ValidTypesMethodFilter.getInstance(), this);
+            }
             javaClassToClassBinder.put(clazz, binder);
         }
         for (final ClassBinder<?> classBinder : javaClassToClassBinder.values()) {
@@ -54,7 +67,7 @@ public class ClassBinderResolverImpl implements ClassBinderResolver {
         }
         return result;
     }
-    
+
     private boolean isIgnored(Class<?> clazz) {
         String packageName = clazz.getPackage().getName();
         if (packageName.equals("java.lang") || packageName.equals("java.util")) {
@@ -68,7 +81,7 @@ public class ClassBinderResolverImpl implements ClassBinderResolver {
         }
         return ignoredClasses.contains(clazz);
     }
-    
+
     @Override
     public ClassBinder<?> getBinder(UmlClass classifier) throws IllegalArgumentException {
         ClassBinder<?> result = (ClassBinder<?>) umlClassToClassBinder.get(classifier);
@@ -77,11 +90,11 @@ public class ClassBinderResolverImpl implements ClassBinderResolver {
         }
         return result;
     }
-    
+
     public Set<Classifier> getDateTpes() {
         Collection<ClassBinder<?>> binders = javaClassToClassBinder.values();
         HashSet result = new HashSet(binders.size());
-        
+
         for (final ClassBinder<?> classBinder : binders) {
             result.add(classBinder.getUmlClas());
         }
@@ -97,14 +110,15 @@ public class ClassBinderResolverImpl implements ClassBinderResolver {
     }
 
     /**
-     * This method is called immediately after an object of this class is deserialized.
-     * This method returns the singleton instance.
+     * This method is called immediately after an object of this class is deserialized. This method returns
+     * the singleton instance.
      */
     protected Object readResolve() {
         return getInstance();
     }
 
     private static class DateBinderLoaderHolder {
+
         private static final ClassBinderResolverImpl INSTANCE = new ClassBinderResolverImpl();
     }
- }
+}
