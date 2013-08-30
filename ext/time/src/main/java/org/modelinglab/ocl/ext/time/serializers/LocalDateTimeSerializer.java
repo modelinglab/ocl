@@ -5,12 +5,11 @@
 
 package org.modelinglab.ocl.ext.time.serializers;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
+import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.temporal.ChronoField;
-import org.threeten.bp.temporal.ChronoUnit;
 
 /**
  *
@@ -29,12 +28,14 @@ public class LocalDateTimeSerializer extends AbstractWrapperSerializer<Timestamp
 
     @Override
     protected LocalDateTime unserialize(Timestamp storedValue) {
-        return LocalDateTime.ofEpochSecond(storedValue.getTime(), 0, ZoneOffset.UTC);
+        Instant instant = Instant.ofEpochMilli(storedValue.getTime());
+        return LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
     }
 
     @Override
     protected Timestamp serialize(LocalDateTime wrapped) {
-        return new Timestamp(wrapped.getLong(ChronoField.INSTANT_SECONDS));
+        Instant instant = wrapped.toInstant(ZoneOffset.UTC);
+        return new Timestamp(instant.toEpochMilli());
     }
 
     @Override
