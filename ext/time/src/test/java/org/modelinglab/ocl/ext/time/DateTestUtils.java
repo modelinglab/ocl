@@ -40,10 +40,8 @@ public class DateTestUtils {
     private final static UserEvaluationEnvironment uee;
     
     static {
-        DateLibrary library = new DateLibrary();
-        
-        StaticEnvironment env = new StaticEnvironment(library.createStore());
-        for (final Classifier classifier : library.createTypes()) {
+        StaticEnvironment env = new StaticEnvironment(DateLibrary.createStore());
+        for (final Classifier classifier : DateLibrary.createTypes()) {
             env.addElement(classifier);
         }
         
@@ -71,7 +69,7 @@ public class DateTestUtils {
             }
         };
         
-        uee = new UserEvaluationEnvironment(env, ip, library.getEvaluators());
+        uee = new UserEvaluationEnvironment(env, ip, DateLibrary.getEvaluators());
     }
     
     private DateTestUtils() {}

@@ -17,7 +17,7 @@ import org.modelinglab.ocl.core.ast.types.Classifier;
  */
 public class ExpectedOperationsTestUtil {
 
-    static OperationsStore operationsStore = new DateLibrary().createStore();
+    static OperationsStore operationsStore = DateLibrary.createStore();
 
     public static void test(Class<?> clazz, Collection<Method> expectedMethods) {
         Classifier classifier = DateUtils.translateToClassifier(clazz);

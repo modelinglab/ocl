@@ -23,7 +23,9 @@ import org.threeten.bp.Duration;
  */
 public class DateLibrary {
 
-    public Set<Classifier> createTypes() {
+    private DateLibrary() {}
+    
+    public static Set<Classifier> createTypes() {
         return Collections.unmodifiableSet(ClassBinderResolverImpl.getInstance().getDateTpes());
     }
 
