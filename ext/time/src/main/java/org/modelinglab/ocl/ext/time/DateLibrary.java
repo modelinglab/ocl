@@ -23,13 +23,11 @@ import org.threeten.bp.Duration;
  */
 public class DateLibrary {
 
-    private Set<Classifier> dateTypes = ClassBinderResolverImpl.getInstance().getDateTpes();
-
     public Set<Classifier> createTypes() {
-        return Collections.unmodifiableSet(dateTypes);
+        return Collections.unmodifiableSet(ClassBinderResolverImpl.getInstance().getDateTpes());
     }
 
-    public OperationsStore createStore() {
+    public static OperationsStore createStore() {
         OperationsStore.OperationsStoreFactory factory = new OperationsStore.OperationsStoreFactory();
 
         Set<Method> methods = getMethods();
@@ -37,7 +35,7 @@ public class DateLibrary {
             factory.addOperation(new DateOperation(method));
         }
 
-        for (final Classifier classifier : dateTypes) {
+        for (final Classifier classifier : ClassBinderResolverImpl.getInstance().getDateTpes()) {
             if (classifier instanceof UmlClass) {
                 UmlClass umlClass = (UmlClass) classifier;
                 ClassBinder<?> binder = ClassBinderResolverImpl.getInstance().getBinder(umlClass);
@@ -52,7 +50,7 @@ public class DateLibrary {
         return factory.createStore();
     }
 
-    public Set<OperationEvaluator> getEvaluators() {
+    public static Set<OperationEvaluator> getEvaluators() {
         HashSet<OperationEvaluator> result = new HashSet<>();
 
         Set<Method> methods = getMethods();
@@ -64,7 +62,7 @@ public class DateLibrary {
             }
         }
 
-        for (final Classifier classifier : dateTypes) {
+        for (final Classifier classifier : ClassBinderResolverImpl.getInstance().getDateTpes()) {
             if (classifier instanceof UmlClass) {
                 UmlClass umlClass = (UmlClass) classifier;
                 ClassBinder<?> binder = ClassBinderResolverImpl.getInstance().getBinder(umlClass);
@@ -78,9 +76,9 @@ public class DateLibrary {
         return result;
     }
 
-    private Set<Method> getMethods() {
+    private static Set<Method> getMethods() {
         HashSet<Method> methods = new HashSet<>();
-        for (final Classifier classifier : dateTypes) {
+        for (final Classifier classifier : ClassBinderResolverImpl.getInstance().getDateTpes()) {
             if (classifier instanceof UmlClass) {
                 UmlClass umlClass = (UmlClass) classifier;
                 ClassBinder<?> binder = ClassBinderResolverImpl.getInstance().getBinder(umlClass);
@@ -101,7 +99,7 @@ public class DateLibrary {
         return methods;
     }
 
-    private Set<Operation> getDefaultOperations(ClassBinder<?> binder) {
+    private static Set<Operation> getDefaultOperations(ClassBinder<?> binder) {
         Set<Operation> result = new HashSet<>();
 
         Class<?> clazz = binder.getJavaClass();
@@ -131,7 +129,7 @@ public class DateLibrary {
         return result;
     }
 
-    private Set<OperationEvaluator> getDefaultEvaluators(ClassBinder<?> binder) {
+    private static Set<OperationEvaluator> getDefaultEvaluators(ClassBinder<?> binder) {
         Set<OperationEvaluator> result = new HashSet<>();
 
         Class<?> clazz = binder.getJavaClass();
