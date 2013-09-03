@@ -4,7 +4,6 @@
  */
 package org.modelinglab.ocl.evaluator;
 
-import org.modelinglab.ocl.core.ast.UmlClass;
 import org.modelinglab.ocl.core.values.ObjectValue;
 
 /**
