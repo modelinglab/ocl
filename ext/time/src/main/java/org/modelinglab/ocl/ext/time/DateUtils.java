@@ -91,6 +91,11 @@ public class DateUtils {
         }
         return oclValue.getValue();
     }
+    
+    public static OclValue<?> translateToOclObject(@Nullable Object javaObject, Class<?> expectedJavaType) {
+        Classifier expectedOclType = translateToClassifier(expectedJavaType);
+        return translateToOclObject(javaObject, expectedOclType);
+    }
 
     public static OclValue<?> translateToOclObject(@Nullable Object javaObject, Classifier expectedType) {
         if (javaObject == null) {
