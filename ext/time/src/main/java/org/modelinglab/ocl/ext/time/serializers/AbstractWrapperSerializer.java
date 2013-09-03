@@ -20,7 +20,6 @@ import org.threeten.bp.Duration;
  *
  */
 public abstract class AbstractWrapperSerializer<S, W> implements SQLSerializable, SQLSerializer {
-
     protected abstract Class<S> getSerializedType();
 
     protected abstract Class<W> getJavaType();
@@ -57,5 +56,22 @@ public abstract class AbstractWrapperSerializer<S, W> implements SQLSerializable
 
         S converted = serialize(wrapped);
         ps.setObject(columnIndex, converted, getSqlType());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        return true;
     }
 }

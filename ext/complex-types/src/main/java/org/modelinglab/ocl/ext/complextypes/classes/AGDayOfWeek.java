@@ -18,7 +18,7 @@ public class AGDayOfWeek extends UmlEnum {
     public static final AGDayOfWeek INSTANCE = new AGDayOfWeek();
 
     private AGDayOfWeek() {
-        setName("DayOfWeek");
+        setName("DayOfWeekBak");
 
         addLiteral(new UmlEnumLiteral("MONDAY"));
         addLiteral(new UmlEnumLiteral("TUESDAY"));

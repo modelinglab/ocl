@@ -5,8 +5,6 @@
 
 package org.modelinglab.ocl.ext.time.serializers;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import org.threeten.bp.Duration;
 import org.threeten.bp.temporal.ChronoUnit;
 

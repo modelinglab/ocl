@@ -7,6 +7,7 @@ package org.modelinglab.ocl.ext.time;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.modelinglab.ocl.core.ast.Operation;
+import org.modelinglab.ocl.core.exceptions.OclEvaluationException;
 import org.modelinglab.ocl.core.values.InvalidValue;
 import org.modelinglab.ocl.core.values.ObjectValue;
 import org.modelinglab.ocl.core.values.OclValue;
@@ -47,15 +48,20 @@ abstract class DateOperationEvaluator extends OperationEvaluator {
         Object result;
         try {
             Object castedVal;
-            if (val == null)  {
+            if (val == null) {
                 castedVal = null;
             }
             else {
                 castedVal = DateUtils.translateToJavaObject(val);
             }
             result = method.invoke(castedVal, args);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (IllegalAccessException | IllegalArgumentException ex) {
             throw new RuntimeException(ex);
+        } catch (InvocationTargetException ex) {
+            if (ex.getTargetException() instanceof RuntimeException) {
+                return InvalidValue.instantiate();
+            }
+            throw new OclEvaluationException(arg.exp, ex.getTargetException());
         }
         return DateUtils.translateToOclObject(result, getEvaluableOperation().getType());
     }
