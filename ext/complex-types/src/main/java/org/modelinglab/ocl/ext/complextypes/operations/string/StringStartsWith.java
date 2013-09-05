@@ -9,7 +9,6 @@ import org.modelinglab.ocl.core.ast.Parameter;
 import org.modelinglab.ocl.core.ast.types.Classifier;
 import org.modelinglab.ocl.core.ast.types.PrimitiveType;
 import org.modelinglab.ocl.core.ast.types.TemplateRestrictions;
-import org.modelinglab.ocl.ext.complextypes.operations.date.DateHour;
 
 /**
  *
