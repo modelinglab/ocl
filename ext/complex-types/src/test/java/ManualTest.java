@@ -6,7 +6,6 @@ import org.modelinglab.ocl.core.ast.StaticEnvironment;
 import org.modelinglab.ocl.core.ast.UmlClass;
 import org.modelinglab.ocl.core.ast.expressions.OclExpression;
 import org.modelinglab.ocl.core.values.ObjectValue;
-import org.modelinglab.ocl.core.values.OclValue;
 import org.modelinglab.ocl.core.values.SetValue;
 import org.modelinglab.ocl.core.vartables.IVariableTable;
 import org.modelinglab.ocl.core.vartables.VariableTable;
@@ -15,10 +14,6 @@ import org.modelinglab.ocl.evaluator.OclEvaluator;
 import org.modelinglab.ocl.evaluator.UnexpectedObjectException;
 import org.modelinglab.ocl.evaluator.UserEvaluationEnvironment;
 import org.modelinglab.ocl.evaluator.iterators.SequentialIteratorEvaluationAlgorithm.SequentialIteratorEvaluationAlgorithmProvider;
-import org.modelinglab.ocl.ext.complextypes.classes.AGDate;
-import org.modelinglab.ocl.ext.complextypes.classes.AGDate.AGDateObject;
-import org.modelinglab.ocl.ext.complextypes.classes.AGDayOfWeek;
-import org.modelinglab.ocl.ext.complextypes.classes.AGTimeUnit;
 import org.modelinglab.ocl.ext.complextypes.classes.ComplexTypesLibrary;
 import org.modelinglab.ocl.parser.OclParser;
 
@@ -38,13 +33,7 @@ public class ManualTest {
         
         StaticEnvironment env = new StaticEnvironment(ComplexTypesLibrary.createStore());
         
-        env.addElement(AGDate.INSTANCE, false);
-        env.addElement(AGDayOfWeek.INSTANCE, false);
-        env.addElement(AGTimeUnit.INSTANCE, false);
-        
         OclParser parser = new OclParser(env);
-        
-        assert AGDate.INSTANCE.equals(AGDate.INSTANCE);
         
         OclExpression exp;
         
