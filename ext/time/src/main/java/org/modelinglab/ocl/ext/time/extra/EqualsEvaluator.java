@@ -10,11 +10,9 @@ import java.lang.reflect.Method;
 import org.modelinglab.ocl.core.ast.Operation;
 import org.modelinglab.ocl.core.ast.UmlClass;
 import org.modelinglab.ocl.core.ast.types.Classifier;
-import org.modelinglab.ocl.core.values.BooleanValue;
-import org.modelinglab.ocl.core.values.InvalidValue;
-import org.modelinglab.ocl.core.values.ObjectValue;
-import org.modelinglab.ocl.core.values.OclValue;
+import org.modelinglab.ocl.core.values.*;
 import org.modelinglab.ocl.evaluator.operations.OperationEvaluator;
+import org.modelinglab.ocl.evaluator.operations.utils.GenericEqual;
 import org.modelinglab.ocl.ext.time.UmlWrapperObject;
 
 /**
@@ -53,6 +51,11 @@ public class EqualsEvaluator extends OperationEvaluator {
             throw new IllegalArgumentException(ex);
         }
         
+    }
+
+    @Override
+    public OclValue<?> visit(EnumValue val, SwitchArgument arg) {
+        return GenericEqual.equal(val, arg);
     }
 
     @Override

@@ -5,26 +5,26 @@
 package org.modelinglab.ocl.ext.time;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import org.modelinglab.ocl.core.ast.Operation;
 import org.modelinglab.ocl.core.ast.OperationsStore;
 import org.modelinglab.ocl.core.ast.UmlClass;
 import org.modelinglab.ocl.core.ast.types.Classifier;
 import org.modelinglab.ocl.evaluator.operations.OperationEvaluator;
 import org.modelinglab.ocl.ext.time.extra.*;
-import org.threeten.bp.Duration;
 
 /**
  *
  */
 public class DateLibrary {
 
-    private DateLibrary() {}
-    
+    private DateLibrary() {
+    }
+
     public static Set<Classifier> createTypes() {
         return Collections.unmodifiableSet(ClassBinderResolverImpl.getInstance().getDateTpes());
     }
@@ -59,7 +59,8 @@ public class DateLibrary {
         for (final Method method : methods) {
             if (Modifier.isStatic(method.getModifiers())) {
                 result.add(new DateStaticOperationEvaluator(new DateOperation(method), method));
-            } else {
+            }
+            else {
                 result.add(new DateInstanceOperationEvaluator(new DateOperation(method), method));
             }
         }
@@ -79,7 +80,8 @@ public class DateLibrary {
     }
 
     private static Set<Method> getMethods() {
-        HashSet<Method> methods = new HashSet<>();
+        Multimap<Class<?>, Method> methodsMultimap = HashMultimap.create();
+
         for (final Classifier classifier : ClassBinderResolverImpl.getInstance().getDateTpes()) {
             if (classifier instanceof UmlClass) {
                 UmlClass umlClass = (UmlClass) classifier;
@@ -90,15 +92,47 @@ public class DateLibrary {
                     for (final Method method : binder.getJavaClass().getDeclaredMethods()) {
                         if (Modifier.isPublic(method.getModifiers())) {
                             if (filter.apply(method)) {
-                                methods.add(method);
+                                methodsMultimap.put(binder.getJavaClass(), method);
                             }
                         }
                     }
                 }
             }
         }
+        
+        Set<Method> result = new HashSet<>(methodsMultimap.size());
+        for (final Class<?> clazz : methodsMultimap.keySet()) {
+            Collection<Method> methodByClass = methodsMultimap.get(clazz);
+            for (final Method method : methodByClass) {
+                if (!isOverrided(method, methodByClass)) {
+                    result.add(method);
+                }
+            }
+        }
 
-        return methods;
+        return result;
+    }
+
+    private static boolean isOverrided(Method method, Collection<? extends Method> methods) {
+        final String methodName = method.getName();
+        final Class<?> declaringSource = method.getDeclaringClass();
+        final Class[] args = method.getParameterTypes();
+        for (final Method otherMethod : methods) {
+            if (otherMethod != method) {
+                if (methodName.equals(otherMethod.getName())
+                    && declaringSource.equals(otherMethod.getDeclaringClass())
+                    && Arrays.equals(args, otherMethod.getParameterTypes())) {
+
+                    assert !method.equals(otherMethod);
+                    assert !method.getReturnType().equals(otherMethod.getReturnType());
+                    if (method.getReturnType().isAssignableFrom(otherMethod.getReturnType())) {
+                        return true;
+                    }
+
+                }
+            }
+        }
+        return false;
     }
 
     private static Set<Operation> getDefaultOperations(ClassBinder<?> binder) {

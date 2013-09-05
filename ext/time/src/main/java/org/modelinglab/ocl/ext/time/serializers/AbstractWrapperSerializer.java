@@ -41,7 +41,7 @@ public abstract class AbstractWrapperSerializer<S, W> implements SQLSerializable
         }
         else {
             W wrapped = unserialize(value);
-            return DateUtils.translateToOclObject(value, expectedType);
+            return DateUtils.translateToOclObject(wrapped, expectedType);
         }
     }
 
