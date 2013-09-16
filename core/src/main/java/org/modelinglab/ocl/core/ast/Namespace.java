@@ -64,7 +64,7 @@ public class Namespace extends Element {
                 : "Namespaces can only contain classifiers, ocl variables or other namespaces!";
         Element other = ownedMembers.put(element.getName(), element);
         if (other != null) {
-            element.setNamespaceUnsecure(null);
+            other.setNamespaceUnsecure(null);
         }
         element.setNamespaceUnsecure(this);
     }
