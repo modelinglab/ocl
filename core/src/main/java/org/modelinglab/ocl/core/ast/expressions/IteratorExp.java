@@ -118,6 +118,7 @@ public abstract class IteratorExp extends LoopExp {
         }
         
         assert getBody() != null;
+        sb.append(getBody());
         
         sb.append(')');
         
