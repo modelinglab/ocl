@@ -35,7 +35,8 @@ public abstract class AbstractWrapperSerializer<S, W> implements SQLSerializable
 
     @Override
     public OclValue<?> fromSQL(ResultSet rs, String columnName, Classifier expectedType) throws SQLException {
-        S value = rs.getObject(columnName, getSerializedType());
+        Object javaType = rs.getObject(columnName);
+        S value = getSerializedType().cast(javaType);
         if (value == null) {
             return VoidValue.instantiate();
         }
