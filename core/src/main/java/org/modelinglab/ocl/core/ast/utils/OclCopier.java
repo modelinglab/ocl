@@ -217,9 +217,9 @@ public class OclCopier implements OclVisitor<Element, OclCopier.Argument> {
         }
         UmlEnum result = new UmlEnum();
         argument.map.put(o, result);
+        result.setName(o.getName());
         visitElement(o, result, argument);
 
-        result.setName(o.getName());
         for (UmlClass subClass : o.getSubClasses()) {
             result.addSubClass((UmlClass) subClass.accept((UmlVisitor<Element, OclCopier.Argument>) this, argument));
         }
