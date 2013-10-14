@@ -246,7 +246,7 @@ public final class OperationCallExp extends FeatureCallExp {
             if (getReferredOperation() == null) {
                 sb.append(".<nullOperation>");
             } else {
-                if (getReferredOperation().getSource() instanceof CollectionType) {
+                if (getSource() != null && getSource().getType() instanceof CollectionType) {
                     sb.append("->");
                 } else {
                     sb.append(".");
