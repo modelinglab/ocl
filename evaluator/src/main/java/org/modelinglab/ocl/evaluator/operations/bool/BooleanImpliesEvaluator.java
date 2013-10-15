@@ -24,10 +24,6 @@ public class BooleanImpliesEvaluator extends OperationEvaluator {
         assert arg.arguments.size() == 1;
         OclValue<?> argVal = arg.arguments.get(0);
         
-        if (argVal.getType().oclIsInvalid()) {
-            return InvalidValue.instantiate();
-        }
-        
         if (!val.getValue()) { //FALSE implies X returns TRUE
             return BooleanValue.TRUE;
         }
@@ -42,11 +38,11 @@ public class BooleanImpliesEvaluator extends OperationEvaluator {
     @Override
     public OclValue<?> visit(InvalidValue val, SwitchArgument arg) {
         assert arg.arguments.size() == 1;
-//        OclValue<?> argVal = arg.arguments.get(0);
-//        
-//        if(argVal.equals(BooleanValue.TRUE)) { //X implies TRUE returns TRUE
-//            return argVal;
-//        }
+        OclValue<?> argVal = arg.arguments.get(0);
+        
+        if(argVal.equals(BooleanValue.TRUE)) { //X implies TRUE returns TRUE
+            return argVal;
+        }
         return val;
     }
 

@@ -36,11 +36,13 @@ public class IfExpEval {
         Boolean conditionResult = ((BooleanValue) condition).getValue();
         
         OclValue<?> result;
-        OclValue<?> thenVal = exp.getThenExpression().accept(ExpressionWalker.getInstance(), runtimeEnv);
-        OclValue<?> elseVal = exp.getElseExpression().accept(ExpressionWalker.getInstance(), runtimeEnv);
+        OclValue<?> thenVal = null;
+        OclValue<?> elseVal = null;
         if (conditionResult) {
+            thenVal = exp.getThenExpression().accept(ExpressionWalker.getInstance(), runtimeEnv);
             result = thenVal;
         } else {
+            elseVal = exp.getElseExpression().accept(ExpressionWalker.getInstance(), runtimeEnv);
             result = elseVal;
         }
         

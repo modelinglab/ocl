@@ -32,7 +32,7 @@ public class BooleanOrEvaluatorTest extends AbstractBinaryOperationTest.Abstract
         executeTest(invalid, invalid, invalid);
         executeTest(invalid, nullVal, invalid);
         executeTest(invalid, falseVal, invalid);
-        executeTest(invalid, trueVal, invalid);
+        executeTest(invalid, trueVal, trueVal);
         
         executeTest(nullVal, invalid, invalid);
         executeTest(nullVal, nullVal, invalid);
@@ -44,7 +44,7 @@ public class BooleanOrEvaluatorTest extends AbstractBinaryOperationTest.Abstract
         executeTest(falseVal, falseVal, falseVal);
         executeTest(falseVal, trueVal, trueVal);
         
-        executeTest(trueVal, invalid, invalid);
+        executeTest(trueVal, invalid, trueVal);
         executeTest(trueVal, nullVal, trueVal);
         executeTest(trueVal, falseVal, trueVal);
         executeTest(trueVal, trueVal, trueVal);

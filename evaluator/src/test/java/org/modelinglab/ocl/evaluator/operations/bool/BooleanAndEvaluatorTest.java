@@ -23,14 +23,14 @@ public class BooleanAndEvaluatorTest extends AbstractBinaryOperationTest.Abstrac
         executeTest(invalid, invalid, invalid);
         executeTest(invalid, nullVal, invalid);
         executeTest(invalid, trueVal, invalid);
-        executeTest(invalid, falseVal, invalid);
+        executeTest(invalid, falseVal, falseVal);
         
         executeTest(nullVal, invalid, invalid);
         executeTest(nullVal, nullVal, invalid);
         executeTest(nullVal, trueVal, invalid);
         executeTest(nullVal, falseVal, falseVal);
         
-        executeTest(falseVal, invalid, invalid);
+        executeTest(falseVal, invalid, falseVal);
         executeTest(falseVal, nullVal, falseVal);
         executeTest(falseVal, falseVal, falseVal);
         executeTest(falseVal, trueVal, falseVal);

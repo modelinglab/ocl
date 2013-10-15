@@ -22,15 +22,15 @@ public class BooleanImpliesEvaluatorTest extends AbstractBinaryOperationTest.Abs
     public void test() throws Exception {
         executeTest(invalid, invalid, invalid);
         executeTest(invalid, nullVal, invalid);
-        executeTest(invalid, trueVal, invalid);
         executeTest(invalid, falseVal, invalid);
+        executeTest(invalid, trueVal, trueVal);
         
         executeTest(nullVal, invalid, invalid);
         executeTest(nullVal, nullVal, invalid);
         executeTest(nullVal, falseVal, invalid);
         executeTest(nullVal, trueVal, trueVal);
         
-        executeTest(falseVal, invalid, invalid);
+        executeTest(falseVal, invalid, trueVal);
         executeTest(falseVal, nullVal, trueVal);
         executeTest(falseVal, falseVal, trueVal);
         executeTest(falseVal, trueVal, trueVal);

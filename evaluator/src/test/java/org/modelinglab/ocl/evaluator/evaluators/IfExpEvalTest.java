@@ -31,4 +31,10 @@ public class IfExpEvalTest extends AbstractTest {
     public void nullTest() throws Exception {
         assertEquals("if (null) then 1 else 2 endif", "invalid");
     }
+
+    @Test
+    public void invalidInOtherBranchTest() throws Exception {        
+        assertEquals("if (invalid.oclIsInvalid()) then 1 else invalid endif", "1");
+        assertEquals("if (false) then invalid else 2 endif", "2");
+    }
 }
