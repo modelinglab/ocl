@@ -23,7 +23,7 @@ public class CollectionExistsEvaluatorTest extends AbstractTest {
         assertEquals("Set{1,2,3}->exists(i | i > 3)", "false");
         assertEquals("Set{1,2,3,4}->exists(i | i > 3)", "true");
         assertEquals("Set{1,2,3,invalid}->exists(i | i > 3)", "invalid");
-        assertEquals("Set{1,2,3,invalid, 4}->exists(i | i > 3)", "invalid");
+        assertEquals("Set{1,2,3,invalid, 4}->exists(i | i > 3)", "true");
         assertEquals("Set{1,2,3,4,invalid}->exists(i | i > 3)", "true");
     }
     
@@ -33,7 +33,7 @@ public class CollectionExistsEvaluatorTest extends AbstractTest {
         assertEquals("OrderedSet{1,2,3}->exists(i | i > 3)", "false");
         assertEquals("OrderedSet{1,2,3,4}->exists(i | i > 3)", "true");
         assertEquals("OrderedSet{1,2,3,invalid}->exists(i | i > 3)", "invalid");
-        assertEquals("OrderedSet{1,2,3,invalid, 4}->exists(i | i > 3)", "invalid");
+        assertEquals("OrderedSet{1,2,3,invalid, 4}->exists(i | i > 3)", "true");
         assertEquals("OrderedSet{1,2,3,4,invalid}->exists(i | i > 3)", "true");
     }
     
@@ -43,7 +43,7 @@ public class CollectionExistsEvaluatorTest extends AbstractTest {
         assertEquals("Bag{1,2,3}->exists(i | i > 3)", "false");
         assertEquals("Bag{1,2,3,4}->exists(i | i > 3)", "true");
         assertEquals("Bag{1,2,3,invalid}->exists(i | i > 3)", "invalid");
-        assertEquals("Bag{1,2,3,invalid, 4}->exists(i | i > 3)", "invalid");
+        assertEquals("Bag{1,2,3,invalid, 4}->exists(i | i > 3)", "true");
         assertEquals("Bag{1,2,3,4,invalid}->exists(i | i > 3)", "true");
     }
     
@@ -53,7 +53,7 @@ public class CollectionExistsEvaluatorTest extends AbstractTest {
         assertEquals("Sequence{1,2,3}->exists(i | i > 3)", "false");
         assertEquals("Sequence{1,2,3,4}->exists(i | i > 3)", "true");
         assertEquals("Sequence{1,2,3,invalid}->exists(i | i > 3)", "invalid");
-        assertEquals("Sequence{1,2,3,invalid, 4}->exists(i | i > 3)", "invalid");
+        assertEquals("Sequence{1,2,3,invalid, 4}->exists(i | i > 3)", "true");
         assertEquals("Sequence{1,2,3,4,invalid}->exists(i | i > 3)", "true");
     }
 }
