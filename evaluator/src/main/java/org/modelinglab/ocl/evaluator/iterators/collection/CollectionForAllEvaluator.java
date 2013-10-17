@@ -11,6 +11,7 @@ import org.modelinglab.ocl.core.ast.types.CollectionType;
 import org.modelinglab.ocl.core.ast.types.PrimitiveType;
 import org.modelinglab.ocl.core.standard.iterators.collection.ForAll;
 import org.modelinglab.ocl.core.values.BooleanValue;
+import org.modelinglab.ocl.core.values.InvalidValue;
 import org.modelinglab.ocl.core.values.OclValue;
 import org.modelinglab.ocl.evaluator.EvaluatorVisitorArg;
 import org.modelinglab.ocl.evaluator.iterators.IteratorEvaluator;
@@ -38,8 +39,8 @@ public class CollectionForAllEvaluator implements IteratorEvaluator<OclValue<?>>
             return null;
         }
         if (taskResult.getType().oclIsUndefined()) {
-            accumulator.setValue(taskResult);
-            return taskResult;
+            accumulator.setValue(InvalidValue.instantiate());
+            return null;
         }
         assert taskResult.equals(BooleanValue.FALSE);
         return taskResult;
