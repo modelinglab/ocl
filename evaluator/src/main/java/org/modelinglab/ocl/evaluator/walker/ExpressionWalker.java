@@ -153,7 +153,7 @@ public final class ExpressionWalker implements OclExpressionsVisitor<OclValue<?>
     }
 
     /*
-     * This methos should not be used.
+     * These methods should not be used.
      */
     @Override
     public OclValue<?> visit(MessageExp exp, EvaluatorVisitorArg argument) {
