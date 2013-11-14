@@ -4,6 +4,7 @@
  */
 package org.modelinglab.ocl.ext.time.serializers;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ import org.threeten.bp.Duration;
 /**
  *
  */
-public abstract class AbstractWrapperSerializer<S, W> implements SQLSerializable, SQLSerializer {
+public abstract class AbstractWrapperSerializer<S, W> implements SQLSerializable, SQLSerializer, Serializable {
     protected abstract Class<S> getSerializedType();
 
     protected abstract Class<W> getJavaType();
