@@ -8,7 +8,7 @@
     </parent>
     <groupId>org.modelinglab.ocl</groupId>
     <artifactId>ocl</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>OCL (POM)</name>
    
@@ -76,7 +76,7 @@
             <dependency>
                 <groupId>org.modelinglab.utils</groupId>
                 <artifactId>m2m</artifactId>
-                <version>1.0.4</version>
+                <version>1.0.5-SNAPSHOT</version>
                 <type>jar</type>
             </dependency>
         </dependencies>
