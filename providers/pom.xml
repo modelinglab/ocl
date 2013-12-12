@@ -4,7 +4,7 @@
     <parent>
         <artifactId>ocl</artifactId>
         <groupId>org.modelinglab.ocl</groupId>
-        <version>1.0.6-SNAPSHOT</version>
+        <version>1.0.6</version>
     </parent>
     <groupId>org.modelinglab.ocl.providers</groupId>
     <artifactId>providers</artifactId>
