@@ -11,7 +11,11 @@
     <version>1.0.6</version>
     <packaging>pom</packaging>
     <name>OCL (POM)</name>
-     
+   
+    <scm>
+        <developerConnection>scm:git:https://github.com/modelinglab/ocl.git</developerConnection>
+    </scm>
+    
     <modules>
         <module>ext</module>
         <module>providers</module>
