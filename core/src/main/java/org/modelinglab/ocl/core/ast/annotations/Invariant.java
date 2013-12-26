@@ -13,6 +13,7 @@ import org.modelinglab.ocl.core.ast.expressions.OclExpression;
  */
 public class Invariant {
     private String name;
+    private String description;
     private UmlClass context;
     private OclExpression expression;
 
@@ -23,10 +24,11 @@ public class Invariant {
         this.name = name;
     }
 
-    public Invariant(String name, UmlClass context, OclExpression expression) {
+    public Invariant(String name, UmlClass context, OclExpression expression, String description) {
         this.name = name;
         this.context = context;
         this.expression = expression;
+        this.description = description;
     }
 
     public String getName() {
@@ -35,6 +37,14 @@ public class Invariant {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public UmlClass getContext() {
