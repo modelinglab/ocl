@@ -4,6 +4,7 @@
  */
 package org.modelinglab.ocl.core.ast.annotations;
 
+import java.io.Serializable;
 import org.modelinglab.ocl.core.ast.UmlClass;
 import org.modelinglab.ocl.core.ast.expressions.OclExpression;
 
@@ -11,7 +12,8 @@ import org.modelinglab.ocl.core.ast.expressions.OclExpression;
  *
  * @author Miguel Angel Garcia de Dios <miguelangel.garcia at imdea.org>
  */
-public class Invariant {
+public class Invariant implements Serializable{
+    private static final long serialVersionUID = 1L;
     private String name;
     private String description;
     private UmlClass context;
