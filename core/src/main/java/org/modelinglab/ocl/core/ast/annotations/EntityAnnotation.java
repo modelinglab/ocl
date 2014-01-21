@@ -8,9 +8,12 @@ import java.io.Serializable;
 
 /**
  * This is an OCL element annotation that marks entities (UML classes stored in database).
+ * 
+ * @deprecated This class should be removed form here and moved to AG Core
  *
  * @author Gonzalo Ortiz Jaureguizar
  */
+@Deprecated
 public class EntityAnnotation implements Serializable {
     private static final long serialVersionUID = 1L;
 
