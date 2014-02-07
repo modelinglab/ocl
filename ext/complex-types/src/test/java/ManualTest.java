@@ -61,7 +61,7 @@ public class ManualTest {
         
         IVariableTable varTable = new VariableTable();
         
-        exp = parser.parse("Date.now().truncate(TimeUnit::DAY).dayOfWeek()");
+        exp = parser.parse("'1 2 3  4'.split(' ')");
         System.out.println(evaluator.evaluate(exp, uee, varTable));
         
         

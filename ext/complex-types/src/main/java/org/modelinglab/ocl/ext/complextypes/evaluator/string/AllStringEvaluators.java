@@ -20,6 +20,7 @@ public class AllStringEvaluators {
         return Arrays.asList(new OperationEvaluator[]{
             new StringContainsEvaluator(),
             new StringEndsWithEvaluator(),
+            new StringSplitEvaluator(),
             new StringStartsWithEvaluator()
         });
     }

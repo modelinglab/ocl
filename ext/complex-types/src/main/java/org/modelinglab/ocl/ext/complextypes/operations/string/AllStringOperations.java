@@ -19,6 +19,7 @@ public class AllStringOperations {
         return Arrays.asList(new Operation[] {
                 StringContains.getInstance(),
                 StringEndsWith.getInstance(),
+                StringSplit.getInstance(),
                 StringStartsWith.getInstance(),
         });
     }
