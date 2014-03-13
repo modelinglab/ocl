@@ -39,7 +39,7 @@ public final class MemoryInstanceProvider implements InstanceProvider {
 
     @Override
     public SetValue<ObjectValue<?>> getAllInstances(UmlClass clazz) {
-        if (instances.containsKey(clazz)) {
+        if (!instances.containsKey(clazz)) {
             Set<ObjectValue<?>> emptySet = Collections.emptySet();
             SetValue<ObjectValue<?>> set = new SetValue<>(emptySet, clazz);
             instances.put(clazz, set);
