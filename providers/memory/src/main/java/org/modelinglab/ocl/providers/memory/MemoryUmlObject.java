@@ -65,6 +65,14 @@ public final class MemoryUmlObject implements UmlObject<Long> {
         return features.get(propertyName);
     }
 
+    public void setProperty(String propertyName, OclValue<?> propertyValue) {
+        if (!features.containsKey(propertyName)) {
+            throw new IllegalArgumentException("UmlClass "+clazz.getName()+" does not contain any "
+                    + "feature with "+propertyName+" name!");
+        }
+        features.put(propertyName, propertyValue);
+    }
+    
     @Override
     public UmlClass getUmlClass() {
         return clazz;
