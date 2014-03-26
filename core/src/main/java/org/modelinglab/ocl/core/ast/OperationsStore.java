@@ -157,7 +157,12 @@ public final class OperationsStore implements Serializable, Cloneable {
                     return null;
                 }
                 UmlClass clazz = classHierarchyIt.next();
-                classIt = clazz.getOperations(operatorName).iterator();
+                if(operatorName == null) {
+                    classIt = clazz.getOperations().iterator();
+                }
+                else {
+                    classIt = clazz.getOperations(operatorName).iterator();
+                }
                 userIt = getOperationByClassifierAndName(clazz, operatorName).iterator();
             }
             assert standardIt != null || userIt != null || classIt != null;
