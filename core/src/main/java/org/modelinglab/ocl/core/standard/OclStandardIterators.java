@@ -4,7 +4,6 @@
  */
 package org.modelinglab.ocl.core.standard;
 
-import com.google.common.base.Preconditions;
 import org.modelinglab.ocl.core.ast.expressions.IteratorExp;
 import org.modelinglab.ocl.core.ast.types.Classifier;
 import org.modelinglab.ocl.core.ast.types.CollectionType;
@@ -17,7 +16,9 @@ import org.modelinglab.ocl.core.standard.iterators.collection.One;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.modelinglab.ocl.core.standard.iterators.exceptions.IllegalIteratorException;
 
 /**
@@ -82,6 +83,37 @@ public class OclStandardIterators {
         }
         
         return createIterator(clazz, sourceType, bodyType);
+    }
+    
+    /**
+     * 
+     * @param sourceType
+     * @return the names of the iterators that can be applied for the given source type.
+     */
+    public Set<String> getIteratorNames(CollectionType sourceType) {
+        Set<String> iteratorNames = new HashSet<>();
+        iteratorNames.addAll(collectionIts.keySet());
+        switch (sourceType.getCollectionKind()) {
+            case BAG: {
+                iteratorNames.addAll(bagIts.keySet());
+                break;
+            }
+            case ORDERED_SET: {
+                iteratorNames.addAll(orderedSetIts.keySet());
+                break;
+            }
+            case SEQUENCE: {
+                iteratorNames.addAll(sequenceIts.keySet());
+                break;
+            }
+            case SET: {
+                iteratorNames.addAll(setIts.keySet());
+                break;
+            }
+            default:
+                throw new AssertionError(sourceType.getCollectionKind() + " is an unexpected collection kind");
+        }
+        return iteratorNames;
     }
     
     private Class<? extends IteratorExp> getIteratorClass(String name, CollectionType sourceType) {
