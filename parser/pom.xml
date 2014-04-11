@@ -29,7 +29,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.peterlavalle</groupId>
+                <groupId>org.modelinglab.custom-sablecc</groupId>
                 <artifactId>sablecc-maven-plugin</artifactId>
                 <version>3.7</version>
                 <executions>
