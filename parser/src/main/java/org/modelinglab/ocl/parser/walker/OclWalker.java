@@ -38,7 +38,7 @@ public class OclWalker extends DepthFirstAdapter {
 
     StaticEnvironment env;
     
-    ConcreteToAbstractMap concreteNodeToAbstractNode;
+    protected ConcreteToAbstractMap concreteNodeToAbstractNode;
     OclExpression oclAst;
     
     public OclWalker(StaticEnvironment env) {
