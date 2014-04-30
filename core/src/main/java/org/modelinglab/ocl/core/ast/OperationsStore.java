@@ -48,6 +48,18 @@ public final class OperationsStore implements Serializable, Cloneable {
         }
         return ops;
     }
+    
+    private Set<Operation> getOperationByClassifier(Classifier classifier) {
+        Set<Operation> operations = new HashSet<>();
+        Map<String, Set<Operation>> allOps = operationsMap.row(classifier);
+        if(allOps != null) {
+            for (Set<Operation> setOps : allOps.values()) {
+                operations.addAll(setOps);
+            }
+        }
+
+        return operations;
+    }
 
     public static class OperationsStoreFactory implements Serializable {
 
@@ -151,7 +163,12 @@ public final class OperationsStore implements Serializable, Cloneable {
             if (oclClassifiersIt.hasNext()) { //there are some ocl classifier
                 Classifier classifier = oclClassifiersIt.next();
                 standardIt = classifier.accept(OclStandardOperations.getInstance(), operatorName).iterator();
-                userIt = getOperationByClassifierAndName(classifier, operatorName).iterator();
+                if(operatorName == null) {
+                    userIt = getOperationByClassifier(classifier).iterator();
+                }
+                else {
+                    userIt = getOperationByClassifierAndName(classifier, operatorName).iterator();
+                }
             } else { //there is no ocl classifier => maybe is an opertor of some UmlClass in the hierarchy
                 if (!classHierarchyIt.hasNext()) { //there are no uml classes in the hierarchy that are note visited => the iterator ends
                     return null;
@@ -161,9 +178,14 @@ public final class OperationsStore implements Serializable, Cloneable {
                     classIt = clazz.getOperations().iterator();
                 }
                 else {
-                    classIt = clazz.getOperations(operatorName).iterator();
+                        classIt = clazz.getOperations(operatorName).iterator();
+                    }
+                if(operatorName == null) {
+                    userIt = getOperationByClassifier(clazz).iterator();
                 }
-                userIt = getOperationByClassifierAndName(clazz, operatorName).iterator();
+                else {
+                    userIt = getOperationByClassifierAndName(clazz, operatorName).iterator();
+                }
             }
             assert standardIt != null || userIt != null || classIt != null;
             return getActualIterator();
