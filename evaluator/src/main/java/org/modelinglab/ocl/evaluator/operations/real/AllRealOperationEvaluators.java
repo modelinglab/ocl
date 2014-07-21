@@ -6,12 +6,6 @@ package org.modelinglab.ocl.evaluator.operations.real;
 
 import com.google.common.collect.ImmutableList;
 import org.modelinglab.ocl.evaluator.operations.OperationEvaluator;
-import org.modelinglab.ocl.evaluator.operations.bool.BooleanAndEvaluator;
-import org.modelinglab.ocl.evaluator.operations.bool.BooleanImpliesEvaluator;
-import org.modelinglab.ocl.evaluator.operations.bool.BooleanNotEvaluator;
-import org.modelinglab.ocl.evaluator.operations.bool.BooleanOrEvaluator;
-import org.modelinglab.ocl.evaluator.operations.bool.BooleanToStringEvaluator;
-import org.modelinglab.ocl.evaluator.operations.bool.BooleanXorEvaluator;
 
 /**
  *
@@ -36,6 +30,7 @@ public class AllRealOperationEvaluators {
                 .add(new RealMinEvaluator())
                 .add(new RealMultiplicationEvaluator())
                 .add(new RealNegativeEvaluator())
+                .add(new RealRoundEvaluator())
                 .add(new RealSubstractionEvaluator())
                 .add(new RealToStringEvaluator())
                 
