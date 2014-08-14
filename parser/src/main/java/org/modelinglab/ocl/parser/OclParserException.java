@@ -41,5 +41,7 @@ public class OclParserException extends OclRuntimeException {
         this.node = ex.getToken();
     }
 
-    
+    public Node getNode() {
+        return node;
+    }
 }
