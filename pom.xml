@@ -4,13 +4,17 @@
     <parent>
         <groupId>org.modelinglab</groupId>
         <artifactId>general-parent</artifactId>
-        <version>5-SNAPSHOT</version>
+        <version>5</version>
     </parent>
     <groupId>org.modelinglab.ocl</groupId>
     <artifactId>ocl</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.0.7</version>
     <packaging>pom</packaging>
     <name>OCL (POM)</name>
+   
+    <properties>
+        <utils.version>1.0.5</utils.version>
+    </properties>
    
     <modules>
         <module>ext</module>
@@ -76,7 +80,7 @@
             <dependency>
                 <groupId>org.modelinglab.utils</groupId>
                 <artifactId>m2m</artifactId>
-                <version>1.0.5-SNAPSHOT</version>
+                <version>${utils.version}</version>
                 <type>jar</type>
             </dependency>
         </dependencies>
