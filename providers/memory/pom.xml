@@ -4,7 +4,7 @@
     <parent>
         <artifactId>providers</artifactId>
         <groupId>org.modelinglab.ocl.providers</groupId>
-        <version>1.0.7</version>
+        <version>2-SNAPSHOT</version>
     </parent>
     <artifactId>memory</artifactId>
     <name>OCL memory provider</name>
