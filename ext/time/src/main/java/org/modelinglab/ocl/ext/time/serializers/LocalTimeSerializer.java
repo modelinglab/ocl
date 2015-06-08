@@ -6,13 +6,14 @@
 package org.modelinglab.ocl.ext.time.serializers;
 
 import java.sql.Time;
+import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.LocalTime;
-import org.threeten.bp.temporal.ChronoField;
 
 /**
  *
  */
 public class LocalTimeSerializer extends AbstractWrapperSerializer<Time, LocalTime> {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected Class<Time> getSerializedType() {
@@ -26,13 +27,14 @@ public class LocalTimeSerializer extends AbstractWrapperSerializer<Time, LocalTi
 
     @Override
     protected LocalTime unserialize(Time storedValue) {
-        return LocalTime.ofSecondOfDay(storedValue.getTime() / 1000);
+        LocalTime lt = DateTimeUtils.toLocalTime(storedValue);
+        return lt;
     }
 
     @Override
     protected Time serialize(LocalTime wrapped) {
-        long milliOfDay = wrapped.getLong(ChronoField.MILLI_OF_DAY);
-        return new Time(milliOfDay);
+        Time t = DateTimeUtils.toSqlTime(wrapped);
+        return t;
     }
 
     @Override

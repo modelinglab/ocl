@@ -15,12 +15,12 @@ import org.modelinglab.ocl.ext.time.DateUtils;
 import org.modelinglab.ocl.ext.time.UmlWrapperObject;
 import org.modelinglab.ocl.utils.sql.SQLSerializable;
 import org.modelinglab.ocl.utils.sql.SQLSerializer;
-import org.threeten.bp.Duration;
 
 /**
  *
  */
 public abstract class AbstractWrapperSerializer<S, W> implements SQLSerializable, SQLSerializer, Serializable {
+    private static final long serialVersionUID = 1L;
     protected abstract Class<S> getSerializedType();
 
     protected abstract Class<W> getJavaType();

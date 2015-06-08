@@ -6,15 +6,14 @@
 package org.modelinglab.ocl.ext.time.serializers;
 
 import java.sql.Timestamp;
-import org.threeten.bp.Instant;
+import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.ZoneOffset;
-import org.threeten.bp.temporal.ChronoField;
 
 /**
  *
  */
 public class LocalDateTimeSerializer extends AbstractWrapperSerializer<Timestamp, LocalDateTime>{
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected Class<Timestamp> getSerializedType() {
@@ -28,14 +27,14 @@ public class LocalDateTimeSerializer extends AbstractWrapperSerializer<Timestamp
 
     @Override
     protected LocalDateTime unserialize(Timestamp storedValue) {
-        Instant instant = Instant.ofEpochMilli(storedValue.getTime());
-        return LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+        LocalDateTime ldt = DateTimeUtils.toLocalDateTime(storedValue);
+        return ldt;
     }
 
     @Override
     protected Timestamp serialize(LocalDateTime wrapped) {
-        Instant instant = wrapped.toInstant(ZoneOffset.UTC);
-        return new Timestamp(instant.toEpochMilli());
+        Timestamp t = DateTimeUtils.toSqlTimestamp(wrapped);
+        return t;
     }
 
     @Override

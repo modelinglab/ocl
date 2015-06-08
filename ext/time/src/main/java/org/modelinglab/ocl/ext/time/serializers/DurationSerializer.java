@@ -12,6 +12,7 @@ import org.threeten.bp.temporal.ChronoUnit;
  *
  */
 public class DurationSerializer extends AbstractWrapperSerializer<Long, Duration> {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected Class<Long> getSerializedType() {

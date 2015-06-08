@@ -5,17 +5,17 @@
 package org.modelinglab.ocl.ext.time.serializers;
 
 import java.sql.Date;
-import java.sql.SQLException;
-import java.util.Calendar;
+import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.LocalDate;
-import org.threeten.bp.temporal.ChronoField;
 
 /**
  *
  */
 public class LocalDateSerializer extends AbstractWrapperSerializer<Date, LocalDate> {
+    private static final long serialVersionUID = 1L;
 
-    private static final long MILLIS_IN_A_DAY = 24 * 60 * 60 * 1000;
+    // Not needed
+    //private static final long MILLIS_IN_A_DAY = 24 * 60 * 60 * 1000;
     
     @Override
     protected Class<Date> getSerializedType() {
@@ -29,12 +29,14 @@ public class LocalDateSerializer extends AbstractWrapperSerializer<Date, LocalDa
 
     @Override
     protected LocalDate unserialize(Date storedValue) {
-        return LocalDate.ofEpochDay(storedValue.getTime() / MILLIS_IN_A_DAY);
+        LocalDate ld = DateTimeUtils.toLocalDate(storedValue);
+        return ld;
     }
 
     @Override
     protected Date serialize(LocalDate wrapped) {
-        return new Date(wrapped.getLong(ChronoField.EPOCH_DAY) * MILLIS_IN_A_DAY);
+        Date date = DateTimeUtils.toSqlDate(wrapped);
+        return date;
     }
 
     @Override

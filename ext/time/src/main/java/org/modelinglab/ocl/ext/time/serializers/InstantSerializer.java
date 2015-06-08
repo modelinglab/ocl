@@ -11,6 +11,7 @@ import org.threeten.bp.Instant;
  *
  */
 public class InstantSerializer extends AbstractWrapperSerializer<Long, Instant> {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected Class<Long> getSerializedType() {

@@ -11,7 +11,6 @@ import org.threeten.bp.*;
 import org.threeten.bp.chrono.*;
 import org.threeten.bp.format.*;
 import org.threeten.bp.temporal.*;
-import org.threeten.bp.zone.*;
 
 /**
  *
@@ -44,6 +43,7 @@ class MappedClassProvider {
             ChronoLocalDate.class,
             ChronoLocalDateTime.class,
             ChronoZonedDateTime.class,
+            ChronoPeriod.class,
             Era.class,
             Chronology.class,
             HijrahChronology.class,

@@ -11,6 +11,7 @@ import org.threeten.bp.ZoneId;
  *
  */
 public class ZoneIdSerializer extends AbstractWrapperSerializer<String, ZoneId> {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected Class<String> getSerializedType() {
