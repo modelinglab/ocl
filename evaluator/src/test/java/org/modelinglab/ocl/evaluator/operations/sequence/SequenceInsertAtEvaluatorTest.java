@@ -17,7 +17,6 @@ import org.modelinglab.ocl.core.values.RealValue;
 import org.modelinglab.ocl.core.values.SequenceValue;
 import org.modelinglab.ocl.evaluator.TesterTool;
 import org.modelinglab.ocl.evaluator.operations.AbstractTernaryOperationTest;
-import static org.junit.Assert.*;
 
 /**
  *
