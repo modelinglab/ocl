@@ -7,7 +7,6 @@ package org.modelinglab.ocl.evaluator.operations.orderedSet;
 import com.google.common.collect.Lists;
 import org.modelinglab.ocl.core.ast.Operation;
 import org.modelinglab.ocl.core.standard.operations.orderedSet.Reverse;
-import org.modelinglab.ocl.core.values.BagValue;
 import org.modelinglab.ocl.core.values.OclValue;
 import org.modelinglab.ocl.core.values.OrderedSetValue;
 import org.modelinglab.ocl.evaluator.operations.OperationEvaluator;

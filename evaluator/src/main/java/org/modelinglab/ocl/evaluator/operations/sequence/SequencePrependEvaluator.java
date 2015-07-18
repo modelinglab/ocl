@@ -9,7 +9,6 @@ import org.modelinglab.ocl.core.ast.Operation;
 import org.modelinglab.ocl.core.standard.operations.sequence.Prepend;
 import org.modelinglab.ocl.core.values.InvalidValue;
 import org.modelinglab.ocl.core.values.OclValue;
-import org.modelinglab.ocl.core.values.OrderedSetValue;
 import org.modelinglab.ocl.core.values.SequenceValue;
 import org.modelinglab.ocl.evaluator.operations.OperationEvaluator;
 
